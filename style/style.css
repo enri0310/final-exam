@@ -1,0 +1,100 @@
+/* Stile globale per la pagina */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #000000;
+}
+
+/* Titoli principali */
+h1 {
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+}
+h2, h3, h4 {
+    color: #000000;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Stile per paragrafi */
+p {
+    line-height: 1.6;
+    font-size: 16px;
+    text-align: justify;
+    color: #000000;
+}
+
+/* Stile per elenco */
+ul{
+    color: #000000;
+}
+
+/* Stile per contenitori */
+.div {
+    padding-left: 20px; 
+    padding-right: 20px; 
+    text-align: justify; 
+    color: #000000;
+  }
+
+/* Stile per i link */
+a {
+    color: rgb(0, 0, 0) !important;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #0056b3; /* Cambia colore al passaggio del mouse */
+    text-decoration: underline; /* Rimuove la sottolineatura al passaggio del mouse */
+}
+
+/* Margine tra le sezioni */
+.section {
+    margin: 40px 0;
+}
+
+/* Pulsanti */
+
+/* Immagini */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.gt_table {
+    width: 100% !important;
+}
+
+/* Stile per il footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #000000;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer a {
+    color: #1f77b4;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Stile per i download button */
+.download-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
