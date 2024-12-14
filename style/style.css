@@ -11,10 +11,17 @@ h1 {
     font-weight: bold;
     text-align: center;
 }
-h2, h3, h4 {
+h3, h4 {
     color: #000000;
     font-weight: bold;
     text-align: left;
+}
+
+h2{
+    color: #000000;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: underline;
 }
 
 /* Stile per paragrafi */
@@ -46,8 +53,8 @@ a {
 }
 
 a:hover {
-    color: #0056b3; /* Cambia colore al passaggio del mouse */
-    text-decoration: underline; /* Rimuove la sottolineatura al passaggio del mouse */
+    color: #0056b3; 
+    text-decoration: underline;
 }
 
 /* Margine tra le sezioni */
@@ -55,14 +62,23 @@ a:hover {
     margin: 40px 0;
 }
 
-/* Pulsanti */
-
+/* Stile per i button */
+.stButton>button {
+    width: 100%;
+    }
+.stButton>button:hover{
+    border-color: rgb(0, 0, 255);
+    }
+.stButton>button:active{
+    background-color: rgb(0, 0, 255);
+}
 /* Immagini */
 img {
     max-width: 100%;
     height: auto;
 }
 
+/* Stile per i tabelle great tables */
 .gt_table {
     width: 100% !important;
 }
@@ -73,7 +89,7 @@ img {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #f1f1f1;
+    background-color: #dcdcdc;
     text-align: center;
     padding: 10px;
     font-size: 14px;
@@ -81,20 +97,3 @@ img {
     box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
 }
 
-.footer a {
-    color: #1f77b4;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-/* Stile per i download button */
-.download-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}

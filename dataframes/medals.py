@@ -69,7 +69,8 @@ def get_medals():
     "United Team of Germany": "Germany",
     "Ceylon" : "Sri Lanka",
     "Macedonia": "North Macedonia",
-    "FR Yugoslavia" : "Serbia and Montenegro" 
+    "FR Yugoslavia" : "Serbia and Montenegro",
+    "Unified Team" : "Soviet Union" 
     }
 
     for year in years:

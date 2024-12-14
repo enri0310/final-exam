@@ -74,19 +74,19 @@ st.markdown(
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.image(utl.resize_image("images/medal.webp", 300, 300), use_container_width = False)
-    if st.button("Vai a Medaglie per edizione"):
-        st.switch_page("an_nation.py")
+    st.image("images/medal_table.png", use_container_width = False)
+    if st.button("Vai a medaglie nel Mondo"):
+        st.switch_page("app_pages/an_world.py")
 
 with col2:
-    st.image(utl.resize_image("images/medal_table.png", 300, 300), use_container_width = False)
-    if st.button("Vai a Medaglie per nazione"):
-        st.switch_page("an_nation.py")
+    st.image("images/europe.png", use_container_width = False)
+    if st.button("Vai a Medaglie in Europa"):
+        st.switch_page("app_pages/an_eu.py")
 
 with col3:
-    st.image(utl.resize_image("images/europe.png", 300, 300), use_container_width = False)
-    if st.button("Vai a Medaglie in Europa"):
-        st.switch_page("an_nation.py")
+    st.image("images/medal.webp", use_container_width = False)
+    if st.button("Vai a medaglie in Italia"):
+        st.switch_page("app_pages/an_italy.py")
 
 st.markdown("---")
 
@@ -141,8 +141,7 @@ st.markdown(
     La <a href="https://en.wikipedia.org/wiki/Germany_at_the_Olympics">Germania</a> ha una storia olimpica complessa, passando da una delegazione 
     unificata durante la Guerra Fredda come
     <a href="https://en.wikipedia.org/wiki/United_Team_of_Germany_at_the_Olympics">Squadra Unificata Tedesca</a> 
-    due comitati separati dal 1968 al 1988 (
-    <a href="https://en.wikipedia.org/wiki/East_Germany_at_the_Olympics">Germania East</a> e 
+    due comitati separati dal 1968 al 1988 (<a href="https://en.wikipedia.org/wiki/East_Germany_at_the_Olympics">Germania East</a> e 
     <a href="https://en.wikipedia.org/wiki/West_Germany_at_the_Olympics">Germania Ovest</a>). 
     Dopo la riunificazione, la Germania ha partecipato come un'unica nazione, riportando così una rappresentazione olimpica comune.
     </p>
@@ -170,6 +169,13 @@ st.markdown(
     <a href="https://en.wikipedia.org/wiki/Montenegro_at_the_Olympics">Montenegro</a> hanno partecipato separatamente alle Olimpiadi.
     </p>
 
+    <p>
+    Un altro caso interessante è quello della <a href="https://en.wikipedia.org/wiki/Unified_Team_at_the_Olympics">Squadra Unificata</a>, 
+    formata dagli atleti provenienti dagli Stati ex-sovietici, che parteciparono alle Olimpiadi del 1992. Dopo il crollo dell'Unione Sovietica nel 1991, 
+    i paesi che ne facevano parte non formarono immediatamente comitati olimpici nazionali separati. Pertanto, un gruppo di atleti sovietici gareggiò 
+    insieme sotto la bandiera olimpica, senza simboli nazionali, come segno di unità temporanea, mentre i nuovi stati indipendenti, come Estonia, 
+    Lettonia e Lituania, parteciparono separatamente.
+    </p>
     <p>
     Infine, il cambio di nome della <strong>Macedonia</strong> in <a href="https://en.wikipedia.org/wiki/North_Macedonia_at_the_Olympics">Macedonia del Nord</a> 
     è il risultato di un lungo processo di negoziazione con la Grecia, che contestava l’uso del nome “Macedonia”, associato a una regione storica greca. 
@@ -200,18 +206,22 @@ st.markdown(
         <li><strong>Bohemia</strong> è stata integrata in <strong>Cecoslovacchia</strong></li>
         <li><strong>Formosa</strong> è stata sostituita con <strong>Chinese Taipei</strong></li>
         <li><strong>ROC</strong> è stata unificata con <strong>Russia</strong></li>
+        <li><strong>Czechoslovakia</strong> è stata lasciata così
         <li>Il nome di <strong>Ceylon</strong> è stato sostituito con <strong>Sri Lanka</strong></li>
         <li><strong>British West Indies</strong> è stata rappresentata da <strong>Jamaica</strong></li>
         <li><strong>FR Jugoslavia</strong> è stata unita con <strong>Serbia and Montenegro</strong></li>
         <li><strong>United Team of Germany</strong> è stata sostituita con <strong>Germany</strong></li>
         <li>Il nome della <strong>Macedonia</strong> è stato cambiato in <strong>North Macedonia</strong>, come riconosciuto a livello internazionale</li>
+        <li><strong>Unified Team</strong> è stata sostituita con <strong>Soviet Union</strong></li>
     </ul>
     </p>
 
     <p>
-    Per quanto riguarda altri casi particolari, come quelli della Germania, della Russia (Unione Sovietica), dell'ex Jugoslavia e della Cecoslovacchia, 
-    è stato lasciato all'utente la possibilità di scegliere come gestirli.
+    Per quanto riguarda altri casi particolari, come quelli dell'Unione Sovietica e dell'ex Jugoslavia, sono stati approfonditi separatamente durante 
+    l'analisi del dataset. Inoltre, nel caso della Germania, è stata lasciata la possibilità all'utente di decidere se considerare la nazione 
+    come un'unica entità anche durante il periodo della divisione in Geramina Est ed Ovest.
     </p>
+
 
     <p>
     Sempre ai fini dell'analisi, alcune delegazioni non riconducibili a una singola nazione sono state escluse dal dataset originale. 
@@ -275,7 +285,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-col1, col2, col3 = st.columns([2, 2, 2])  # Tre colonne, la centrale più larga
+'''col1, col2, col3 = st.columns([2, 2, 2])  # Tre colonne, la centrale più larga
 with col2:
     with open("dataframes/dataframes.zip", "rb") as fp:
         btn = st.download_button(
@@ -284,7 +294,7 @@ with col2:
             file_name = "dataframes.zip",
             mime = "application/zip",
             use_container_width = True
-        )
+        )'''
 
 
 # Footer

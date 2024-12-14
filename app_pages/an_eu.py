@@ -20,8 +20,12 @@ renamed = {"East Germany": "Germany",
 
 
 medals_renamed = medals.with_columns(
-    pl.col("Nation").map_elements(lambda x: renamed.get(x, x)).alias("Nation")
+    pl.when(pl.col("Nation") == "East Germany")
+    .then(pl.lit("Germany")).when(pl.col("Nation") == "West Germany")
+    .then(pl.lit("Germany"))
+    .alias("Germany")
 )
+
 medals_with_europe = medals_renamed.join(
     europe.rename({"Year": "eu_Year"}), 
     on="Nation", 
@@ -42,19 +46,12 @@ eu_medals = (medals_renamed
           .filter(pl.col("Nation").is_in(europe.select("Nation").unique().to_series().to_list()))
           .filter(pl.col("Year").is_not_null())
 )
-eu_medals = (eu_medals
-              .group_by("Nation")
-              .agg([pl.col("Gold").sum().alias("Gold"),
+eu_medals
+
+medal_counts = eu_medals.group_by("Nation").agg([pl.col("Gold").sum().alias("Gold"),
                     pl.col("Silver").sum().alias("Silver"),
                     pl.col("Bronze").sum().alias("Bronze"),
-                    pl.col("Total").sum().alias("Total")])
-)
-
-
-medal_counts = eu_medals.group_by("Nation").agg(
-    pl.sum("Total").alias("Total Medals")
-).sort("Total Medals")
-
+                    pl.col("Total").sum().alias("Total Medals")]).sort("Total Medals", descending= True)
 
 bar_chart = (
     alt.Chart(medal_counts)
@@ -72,31 +69,34 @@ st.altair_chart(bar_chart,
                 use_container_width = True)
 
 medal_counts
-pie_chart = alt.Chart(medal_counts).mark_arc().encode(
+top_14 = medal_counts[:14]
+other_nations = medal_counts[14:]
+st.metric(
+    label="Nazioni Partecipanti",
+    value=None
+)
+st.metric(
+    label="Nazioni Vincitrici",
+    value=None
+)
+# Calcola il totale per le altre nazioni
+other_total = other_nations.select(pl.col("Total Medals").sum()).item()
+other_row = {"Nation": "Altre", "Gold": 0, "Silver": 0, "Bronze": 0, "Total Medals": other_total}
+
+# Combina le prime 14 nazioni con "Altre"
+final_data = pl.DataFrame(top_14.vstack(pl.DataFrame([other_row])))
+
+# Crea il grafico a torta
+pie_chart = alt.Chart(final_data).mark_arc().encode(
     theta=alt.Theta("Total Medals:Q"),
-    color=alt.Color("Nation:N"),
+    color=alt.Color("Nation:N", legend=alt.Legend(title="Nazione")),
     tooltip=["Nation", "Total Medals"]
 ).properties(
     title="Distribuzione delle Medaglie Olimpiche per Nazione dell'UE"
 )
 
-st.altair_chart(pie_chart, 
-                use_container_width = True)
-
-eu_medals
-
-# Grafico a barre impilate per tipo di medaglia
-stacked_pie_chart = alt.Chart(eu_medals).mark_arc().encode(
-    theta=alt.Theta("Total:Q"),
-    color=alt.Color(field="Nation", type="nominal", legend=alt.Legend(title="Nazione")),
-    tooltip=["Nation", "Gold", "Total"]
-).properties(
-    title="Distribuzione delle Medaglie per Tipo"
-)
-
-# Visualizza in Streamlit
-st.altair_chart(stacked_pie_chart, use_container_width=True)
-
+# Mostra il grafico in Streamlit
+st.altair_chart(pie_chart, use_container_width=True)
 
 stacked_pie_chart = alt.Chart(eu_medals).mark_arc().encode(
     theta=alt.Theta("value:Q", title="Numero di Medaglie"),

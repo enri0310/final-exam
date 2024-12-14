@@ -9,9 +9,9 @@ if __name__ == "__main__":
     pages = {
         "Home": [st.Page("home.py", title="Home", icon="🏠")],
         "Analisi": [
-            st.Page("app_pages/an_nation.py", title="Analisi per nazione", icon="📅"),
-            st.Page("app_pages/an_edition.py", title="Analisi per edizione", icon="📅"),
-            st.Page("app_pages/an_eu.py", title="Analisi Unione Europea", icon="📅"),
+            st.Page("app_pages/an_world.py", title="Analisi nel Mondo", icon="📅"),
+            st.Page("app_pages/an_eu.py", title="Analisi in Unione Europea", icon="📅"),
+            st.Page("app_pages/an_italy.py", title="Analisi in Italia", icon="📅")        
         ],
         "Quiz": []
     }
