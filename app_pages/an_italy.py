@@ -5,11 +5,21 @@ import utils as utl
 
 utl.setup_page(
     title="Italia",
-    icon="🏅",
+    icon="🇮🇹",
     layout="centered",
     css_file="styles.css"
 )
 
-st.title("Analisi delle Medaglie Olimpiche in Italia")
+st.title("Analisi delle Medaglie Olimpiche in Italia 🍕")
 
 medals = st.session_state.medal
+
+st.metric(
+    label="Nazioni Partecipanti",
+    value=None
+)
+st.metric(
+    label="Nazioni Vincitrici",
+    value=None
+)
+

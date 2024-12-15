@@ -16,9 +16,7 @@ utl.setup_page(
 
 #dataset
 medals = st.session_state.medal
-medals = medals.with_columns(
-    pl.col("Nation").alias("old_nation")
-)
+medals = medals.with_columns(pl.col("Nation").alias("old_nation"))
 cities = st.session_state.city
 cities = cities.with_columns(
     pl.col("Nation").alias("old_nation")
@@ -40,12 +38,8 @@ with st.sidebar:
             .alias("Nation")
         )
     else:
-        medals = medals.with_columns(
-            pl.col("old_nation").alias("Nation")
-        )
-        cities = cities.with_columns(
-            pl.col("old_nation").alias("Nation")
-        )
+        medals = medals.with_columns(pl.col("old_nation").alias("Nation"))
+        cities = cities.with_columns(pl.col("old_nation").alias("Nation"))
 medals = (medals
               .group_by(["Nation", "Year"])
               .agg([pl.col("Gold").sum().alias("Gold"),
@@ -54,6 +48,7 @@ medals = (medals
                     pl.col("Total").sum().alias("Total")]
               )
 )
+
 st.title("Analisi delle medaglie olimpiche nel Mondo 🌍")
 
 years = medals.select("Year").unique().sort("Year").to_series().to_list()
@@ -216,7 +211,7 @@ pie_chart = (base_pie
                  alt.Theta("Frac"),
                  alt.Color(
                      "Type", 
-                     scale = alt.Scale(domain = ["Gold", "Silver", "Bronze"],range = ["gold", "silver", "brown"]),
+                     scale = alt.Scale(domain = ["Gold", "Silver", "Bronze"], range = ["#FFD700", "#C0C0C0", "#CD7F32"]),
                      legend = None
                  ),
                  alt.Order("Order", sort = "ascending"),
@@ -398,7 +393,7 @@ chart = (
             alt.Tooltip("Bronze:Q", title = "Bronzi"),
             alt.Tooltip("Total:Q", title = "Totale")
         ])
-    )
+)
 st.altair_chart(chart, 
                 use_container_width = True)
 

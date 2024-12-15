@@ -10,107 +10,138 @@ utl.setup_page(
     css_file = "styles.css"
 )
 
-st.title("Analisi delle Medaglie Olimpiche in Unione Europea")
-
+#dataset
 medals = st.session_state.medal
 europe = st.session_state.europe
-
-renamed = {"East Germany": "Germany", 
-           "West Germany": "Germany"}
-
-
-medals_renamed = medals.with_columns(
-    pl.when(pl.col("Nation") == "East Germany")
-    .then(pl.lit("Germany")).when(pl.col("Nation") == "West Germany")
+medals = medals.with_columns(
+    pl.when(pl.col("Nation") == "West Germany")
     .then(pl.lit("Germany"))
-    .alias("Germany")
+    .otherwise(pl.col("Nation"))
+    .alias("Nation")
+)
+medals = (medals
+          .group_by(["Nation", "Year"])
+          .agg([
+              pl.col("Gold").sum().alias("Gold"),
+              pl.col("Silver").sum().alias("Silver"),
+              pl.col("Bronze").sum().alias("Bronze"),
+              pl.col("Total").sum().alias("Total")
+          ])
+)
+eu_medals = (
+    medals
+    .join(europe.rename({"Year": "eu_Year"}), on="Nation", how="left") 
+    .filter(pl.col("Year") >= pl.col("eu_Year"))  
 )
 
-medals_with_europe = medals_renamed.join(
-    europe.rename({"Year": "eu_Year"}), 
-    on="Nation", 
-    how="left"  
-)
-eu_medals = (medals_renamed
-          .join(
-              europe.rename({"Year": "eu_Year"}), 
-              on="Nation", 
-              how="left"
-          )
-          .with_columns(
-              pl.when(pl.col("Year") < pl.col("eu_Year"))
-              .then(None)
-              .otherwise(pl.col("Year"))
-              .alias("Year")
-          )
-          .filter(pl.col("Nation").is_in(europe.select("Nation").unique().to_series().to_list()))
-          .filter(pl.col("Year").is_not_null())
-)
-eu_medals
+st.title("Analisi delle Medaglie Olimpiche in Unione Europea 🤝")
 
-medal_counts = eu_medals.group_by("Nation").agg([pl.col("Gold").sum().alias("Gold"),
-                    pl.col("Silver").sum().alias("Silver"),
-                    pl.col("Bronze").sum().alias("Bronze"),
-                    pl.col("Total").sum().alias("Total Medals")]).sort("Total Medals", descending= True)
 
-bar_chart = (
+medal_counts = (
+    eu_medals
+    .group_by("Nation")
+    .agg([
+        pl.col("Gold").sum().alias("Gold"),
+        pl.col("Silver").sum().alias("Silver"),
+        pl.col("Bronze").sum().alias("Bronze"),
+        pl.col("Total").sum().alias("Total"),
+        pl.col("eu_Year").min().alias("Year")])
+    .sort("Total", descending = True)
+
+)
+chart = (
     alt.Chart(medal_counts)
     .mark_bar()
     .encode(
-        alt.X("Nation:N", sort = "-y"),
-        alt.Y("Total Medals:Q"),
-        alt.Color("Nation:N"),
-        alt.Tooltip(["Nation", "Total Medals"])
+        alt.X("Nation:N", sort = "-y", title = "Nazioni"),
+        alt.Y("Total:Q", title = "Totale medaglie"),
+        alt.Color("Nation:N", title = "Nazioni", legend = None),
+        tooltip = [
+            alt.Tooltip("Nation:N", title = "Nazione"),
+            alt.Tooltip("Gold:Q", title = "Ori"),
+            alt.Tooltip("Silver:Q", title = "Argenti"),
+            alt.Tooltip("Bronze:Q", title = "Bronzi"),
+            alt.Tooltip("Total:Q", title = "Totale"),
+            alt.Tooltip("Year:O", title = "Entrata in UE")
+        ]
     )
-    .properties(title="Totale Medaglie Olimpiche per Paese dell'UE")
+    .properties(title = "Totale medaglie olimpiche per paese dell'UE",)
+    .configure_title(anchor = "middle")
 )
-
-st.altair_chart(bar_chart, 
+st.altair_chart(chart, 
                 use_container_width = True)
 
-medal_counts
-top_14 = medal_counts[:14]
-other_nations = medal_counts[14:]
-st.metric(
-    label="Nazioni Partecipanti",
-    value=None
+
+nations = eu_medals.select("Nation").unique().sort("Nation").to_series().to_list()
+
+selected_nations = st.multiselect(
+    "Seleziona uno o più stati",
+    nations,
+    max_selections = 4,
+    default = ["Italy", "France", "Spain"]
 )
-st.metric(
-    label="Nazioni Vincitrici",
-    value=None
+chart_data = (medals
+           .filter(pl.col("Nation").is_in(selected_nations))
+           .group_by(["Nation"])
+           .agg([
+               pl.col("Gold").sum().alias("Gold"),
+               pl.col("Silver").sum().alias("Silver"),
+               pl.col("Bronze").sum().alias("Bronze"),
+               pl.col("Total").sum().alias("Total")
+           ])
+           .select(["Nation", "Gold", "Silver", "Bronze"])
+           .unpivot(
+                index = "Nation",
+                on = ["Gold", "Silver", "Bronze"],
+                value_name = "Count",
+                variable_name = "Type"
+            )
 )
-# Calcola il totale per le altre nazioni
-other_total = other_nations.select(pl.col("Total Medals").sum()).item()
-other_row = {"Nation": "Altre", "Gold": 0, "Silver": 0, "Bronze": 0, "Total Medals": other_total}
-
-# Combina le prime 14 nazioni con "Altre"
-final_data = pl.DataFrame(top_14.vstack(pl.DataFrame([other_row])))
-
-# Crea il grafico a torta
-pie_chart = alt.Chart(final_data).mark_arc().encode(
-    theta=alt.Theta("Total Medals:Q"),
-    color=alt.Color("Nation:N", legend=alt.Legend(title="Nazione")),
-    tooltip=["Nation", "Total Medals"]
-).properties(
-    title="Distribuzione delle Medaglie Olimpiche per Nazione dell'UE"
+chart = (alt.Chart(chart_data)
+        .mark_bar(size = 40)
+        .encode(
+            alt.X("Nation:N"),
+            alt.XOffset(
+                "Type:N",
+                title = "Tipo di Medaglia",
+                sort = ["Silver", "Gold", "Bronze"]
+            ),
+            alt.Y("Count:Q", title = "Totale medaglie"),
+            alt.Color(
+                "Type:N",
+                title = "Tipo di medaglia",
+                scale = alt.Scale(domain = ["Gold", "Silver", "Bronze"], range = ["#FFD700", "#C0C0C0", "#CD7F32"])
+            ),
+            tooltip = [
+                alt.Tooltip("Nation:N", title="Nazione"),
+                alt.Tooltip("Type:N", title = "Tipo di medaglia"),
+                alt.Tooltip("Count:Q", title = "Quantità")
+            ]
+        )
+        .properties(title = "Confronto tra nazioni e tipologia di medaglie")
+        .configure_title(anchor = "middle")
 )
 
-# Mostra il grafico in Streamlit
-st.altair_chart(pie_chart, use_container_width=True)
+# Visualizzazione con Streamlit
+st.altair_chart(chart, use_container_width=True)
 
-stacked_pie_chart = alt.Chart(eu_medals).mark_arc().encode(
-    theta=alt.Theta("value:Q", title="Numero di Medaglie"),
-    color=alt.Color("Nation:N", legend=alt.Legend(title="Nazione")),
-    tooltip=["Nation", "variable:N", "value:Q"]
-).facet(
-    column=alt.Column("variable:N", header=alt.Header(title="Tipo di Medaglia"))
-).transform_fold(
-    ["Gold", "Silver", "Bronze"],  # Specifica le colonne da trasformare
-    as_=["variable", "value"]  # Nomina le nuove colonne create
-).properties(
-    title="Distribuzione delle Medaglie per Tipo"
+
+chart = (
+    alt.Chart(eu_medals)
+    .mark_rect()
+    .encode(
+        alt.X("Year:O", title="Anno"),
+        alt.Y("Nation:N", title="Nazione"),
+        alt.Color("Total:Q", scale = alt.Scale(type = "log", scheme = "bluepurple"), title = "Totale medaglie"),
+        tooltip=[
+            alt.Tooltip("Nation:N", title="Nazione"),
+            alt.Tooltip("Year:O", title="Anno"),
+            alt.Tooltip("Total:Q", title="Totale medaglie")
+        ]
+    )
+    .properties(title="Totale medaglie per anno e nazione")
+    .configure_title(anchor = "middle")
 )
-
-# Visualizzare il grafico in Streamlit
-st.altair_chart(stacked_pie_chart)
+st.altair_chart(chart, 
+                use_container_width = True)
 
