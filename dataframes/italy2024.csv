@@ -1,0 +1,81 @@
+Athlete,Gold,Silver,Bronze,Total,City,Region
+Thomas Ceccon ,1,0,1,2, Thiene,VENETO 
+Manila Esposito ,0,1,1,2, Boscotrecase,CAMPANIA 
+Gregorio Paltrinieri ,0,1,1,2, Carpi,EMILIA-ROMAGNA 
+Alice D’Amato ,1,1,0,2, Genova,LIGURIA 
+Filippo Macchi ,0,2,0,2, Pontedera,TOSCANA 
+Filippo Ganna ,0,1,1,2, Verbania,PIEMONTE 
+Simone Consonni ,0,1,1,2, Ponte San Pietro,LOMBARDIA 
+Arianna Errigo ,0,1,0,1, Monza,LOMBARDIA 
+Alessandro Miressi ,0,0,1,1, Torino,PIEMONTE 
+Giulia Rizzi ,1,0,0,1, Udine,FRIULI-VENEZIA GIULIA 
+Alice Volpi ,0,1,0,1, Siena,TOSCANA 
+Gabriele Casadei ,0,1,0,1, Ivrea,PIEMONTE 
+Luca Rambaldi ,0,1,0,1, Ferrara,EMILIA-ROMAGNA 
+Alice Bellandri ,1,0,0,1, Roncadelle,LOMBARDIA 
+Anna Danesi ,1,0,0,1, Roncadelle,LOMBARDIA 
+Ilaria Spirito ,1,0,0,1, Albisola Superiore,LIGURIA 
+Angela Andreoli ,0,1,0,1, Brescia,LOMBARDIA 
+Mara Navarria ,1,0,0,1, Udine,FRIULI-VENEZIA GIULIA 
+Martina Favaretto ,0,1,0,1, Camposampiero,VENETO 
+Carlo Tacchini ,0,1,0,1, Verbania,PIEMONTE 
+Luigi Samele ,0,0,1,1, Foggia,PUGLIA 
+Giorgio Malan ,0,0,1,1, Torino,PIEMONTE 
+Rossella Fiamingo ,1,0,0,1, Catania,SICILIA 
+Gaia Giovannini ,1,0,0,1, San Giovanni in Persiceto,EMILIA-ROMAGNA 
+Chiara Consonni ,1,0,0,1, Ponte San Pietro,LOMBARDIA 
+Myriam Sylla ,1,0,0,1, Palermo,SICILIA 
+Caterina Banti ,1,0,0,1, Roma,LAZIO 
+Lorenzo Musetti ,0,0,1,1, Carrara,TOSCANA 
+Daniela Mogurean ,0,0,1,1, Moldavia,ESTERO 
+Paolo Conte Bonin ,0,0,1,1, Thiene,VENETO 
+Sara Errani ,1,0,0,1, Bologna,EMILIA-ROMAGNA 
+Giovanni De Gennaro ,1,0,0,1, Roncadelle,LOMBARDIA 
+Stefano Oppo ,0,1,0,1, Oristano,SARDEGNA 
+Tommaso Marini ,0,1,0,1, Ancona,MARCHE 
+Alberta Santuccio ,1,0,0,1, Catania,SICILIA 
+Antonino Pizzolato ,0,0,1,1, Castelvetrano,SICILIA 
+Jasmine Paolini ,1,0,0,1, Castelnuovo di Garfagnana,TOSCANA 
+Giorgia Villa ,0,1,0,1, Ponte San Pietro,LOMBARDIA 
+Alessia Orro ,1,0,0,1, Oristano,SARDEGNA 
+Alessia Maurelli ,0,0,1,1, Rivoli,PIEMONTE 
+Sofia Raffaeli ,0,0,1,1, Ancona,MARCHE 
+Jonathan Milan ,0,0,1,1, Tolmezzo,FRIULI-VENEZIA GIULIA 
+Diana Bacosi ,1,0,0,1, Città della Pieve,UMBRIA 
+Carlotta Cambi ,1,0,0,1, San Miniato,TOSCANA 
+Leonardo Deplano ,0,0,1,1, Firenze,TOSCANA 
+Agnese Duranti ,0,0,1,1, Spoleto,UMBRIA 
+Francesco Lamon ,0,0,1,1, Mirano,VENETO 
+Silvana Stanco ,0,1,0,1, Svizzera,ESTERO 
+Caterina Bosetti ,1,0,0,1, Busto Arsizio,LOMBARDIA 
+Monica De Gennaro ,1,0,0,1, Piano di Sorrento,CAMPANIA 
+Vittoria Guazzini ,1,0,0,1, Pontedera,TOSCANA 
+Loveth Omoruyi ,1,0,0,1, Lodi,LOMBARDIA 
+Ekaterina Antropova ,1,0,0,1, Islanda,ESTERO 
+Francesca Palumbo ,0,1,0,1, Potenza,BASILICATA 
+Nadia Battocletti ,0,1,0,1, Cavareno,TRENTINO-ALTO ADIGE 
+Mattia Furlani ,0,0,1,1, Marino,LAZIO 
+Guillaume Bianchi ,0,1,0,1, Roma,LAZIO 
+Manuel Frigo ,0,0,1,1, Cittadella,VENETO 
+Paola Egonu ,1,0,0,1, Cittadella,VENETO 
+Elisa Iorio ,0,1,0,1, Modena,EMILIA-ROMAGNA 
+Gabriel Soares ,0,1,0,1, Brasile,ESTERO 
+Marta Maggetti ,1,0,0,1, Cagliari,SARDEGNA 
+Luca Chiumento ,0,1,0,1, Padova,VENETO 
+Simone Alessio ,0,0,1,1, Livorno,TOSCANA 
+Alessio Foconi ,0,1,0,1, Roma,LAZIO 
+Marina Lubian ,1,0,0,1, Moncalieri,PIEMONTE 
+Paolo Monna ,0,0,1,1, Fasano,PUGLIA 
+Ruggero Tita ,1,0,0,1, Rovereto,TRENTINO-ALTO ADIGE 
+Elia Viviani ,0,1,0,1, Isola della Scala,VENETO 
+Gabriele Rossetti ,1,0,0,1, Firenze,TOSCANA 
+Laura Paris ,0,0,1,1, Rho,LOMBARDIA 
+Nicolò Martinenghi ,1,0,0,1, Varese,LOMBARDIA 
+Andy Diaz ,0,0,1,1, Cuba,ESTERO 
+Federico Nilo Maldini ,0,1,0,1, Bologna,EMILIA-ROMAGNA 
+Giacomo Gentili ,0,1,0,1, Cremona,LOMBARDIA 
+Sarah Fahr ,1,0,0,1, Germania,ESTERO 
+Ginevra Taddeucci ,0,0,1,1, Lastra a Signa,TOSCANA 
+Lorenzo Zazzeri ,0,0,1,1, Firenze,TOSCANA 
+Andrea Panizza ,0,1,0,1, Lecco,LOMBARDIA 
+Martina Centofanti ,0,0,1,1, Roma,LAZIO 

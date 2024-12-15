@@ -10,8 +10,7 @@ import statsmodels.api as sm
 utl.setup_page(
     title = "Mondo",
     icon = "🌍",
-    layout = "centered",
-    css_file = "styles.css"
+    layout = "centered"
 )
 
 #dataset

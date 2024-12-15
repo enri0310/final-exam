@@ -6,8 +6,7 @@ import utils as utl
 utl.setup_page(
     title="Italia",
     icon="🇮🇹",
-    layout="centered",
-    css_file="styles.css"
+    layout="centered"
 )
 
 st.title("Analisi delle Medaglie Olimpiche in Italia 🍕")
@@ -23,3 +22,5 @@ st.metric(
     value=None
 )
 
+italy2024 = st.session_state.italy2024
+italy2024

@@ -6,8 +6,7 @@ import utils as utl
 utl.setup_page(
     title = "Europa",
     icon = "🇪🇺",
-    layout = "centered",
-    css_file = "styles.css"
+    layout = "centered"
 )
 
 #dataset

@@ -2,10 +2,9 @@ import streamlit as st
 import utils as utl
 
 utl.setup_page(
-    title="Olimpiadi",
-    icon="🏅",
-    layout="centered",
-    css_file="styles.css"
+    title = "Olimpiadi",
+    icon = "🏅",
+    layout = "centered"
 )
 
 
