@@ -147,3 +147,107 @@ final_chart = (
 )
 st.altair_chart(final_chart,
                 use_container_width = True)
+
+#mappa
+citta = pl.read_csv("map/comuni_geocoded.csv", null_values = ["NA", ""], separator = ";")
+citta = (
+    citta
+    .filter(
+        (pl.col("latitudine").is_between(36, 47)) & 
+        (pl.col("longitudine").is_between(6, 19))
+    )
+    .group_by("nome")
+    .agg([
+        pl.col("longitudine").mean().alias("longitudine"),
+        pl.col("latitudine").mean().alias("latitudine"),
+        pl.col("nomeProvincia").first().alias("Provincia")
+    ])
+)
+comuni = (
+    italy2024
+    .filter(pl.col("Region") != "ESTERO")
+    .group_by("City")
+    .agg([
+        pl.col("Gold").sum(),
+        pl.col("Silver").sum(),
+        pl.col("Bronze").sum(),
+        pl.col("Total").sum()
+    ])
+)
+comuni = comuni.join(
+    citta,
+    how = "left",
+    left_on = "City",
+    right_on = "nome"
+)
+
+world = utl.get_geography()
+chartit = (
+    alt.Chart(world[world["NAME"] == "Italy"])
+    .mark_geoshape()
+    .encode(color = alt.value("lightgrey"))
+    .properties(width = 600, height = 600)
+)
+points = (
+    alt.Chart(comuni)
+    .mark_circle(size = 20)
+    .encode(
+        longitude = "longitudine:Q",
+        latitude = "latitudine:Q",
+        color = alt.Color("Total:N", scale = alt.Scale(scheme = "category10"))
+)
+)
+chart = ((chartit + points)
+         .properties(width = 600, height = 600)
+         .project(
+             type = "azimuthalEqualArea",
+             scale = 2500, 
+             center = (12, 42) 
+         )
+)
+utl.open_map(chart, "italy")
+
+province = utl.get_region()
+province = province[province["geonunit"] == "Italy"]
+
+provincia = (
+    comuni
+    .group_by("Provincia")
+    .agg([
+        pl.col("Gold").sum(),
+        pl.col("Silver").sum(),
+        pl.col("Bronze").sum(),
+        pl.col("Total").sum()
+    ])
+)
+provincia = provincia.with_columns(
+            pl.when(pl.col("Provincia") == "Torino")
+            .then(pl.lit("Turin"))
+            .when(pl.col("Provincia") == "Oristano")
+            .then(pl.lit("Oristrano"))
+            .when(pl.col("Provincia") == "Monza e della Brianza")
+            .then(pl.lit("Monza e Brianza"))
+            .otherwise(pl.col("Provincia"))
+            .alias("Provincia")
+        )
+provincia = province.merge(
+    provincia.to_pandas(),
+    left_on = "name",
+    right_on = "Provincia"
+)
+chartpr = (
+    alt.Chart(provincia)
+    .mark_circle(size = 20)
+    .mark_geoshape()
+    .encode(color = alt.Color("Total:N", scale = alt.Scale(scheme = "category10")))
+    .properties(width = 600, height = 600)
+)
+chart = ((chartit + chartpr)
+         .properties(width = 600, height = 600)
+         .project(
+             type = "azimuthalEqualArea",
+             scale = 2500, 
+             center = (12, 42) 
+         )
+)
+utl.open_map(chart, "province")

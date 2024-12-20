@@ -35,6 +35,10 @@ def get_geography():
     path = "map/ne_10m_admin_0_countries.zip"
     return gpd.read_file(path)
 
+def get_region():
+    path = "map/ne_10m_admin_1_states_provinces.zip"
+    return gpd.read_file(path)
+
 def add_map(chart, name = "map"):
     chart.save(f"map/{name}.html")
 

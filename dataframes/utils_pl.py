@@ -58,3 +58,8 @@ def clean_column(df, column_name):
 def cast_column(df, column, dtype = pl.Int64, fill_value = 0):
      df = df.with_columns(pl.col(column).cast(dtype).fill_null(fill_value))
      return df
+
+def concatenate_df(dfs):
+    if not dfs:
+        return None
+    return pl.concat(dfs)
