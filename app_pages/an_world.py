@@ -13,13 +13,14 @@ utl.setup_page(
     layout = "centered"
 )
 
-#dataset
+#import dataset
 medals = st.session_state.medal
 medals = medals.with_columns(pl.col("Nation").alias("old_nation"))
 cities = st.session_state.city
 cities = cities.with_columns(
     pl.col("Nation").alias("old_nation")
 )
+#caso della germania est e ovest
 with st.sidebar:
     if st.toggle("Unisci Germania Est ed Ovest", value=False):
         medals = medals.with_columns(
@@ -50,15 +51,20 @@ medals = (medals
 
 st.title("Analisi delle medaglie olimpiche nel Mondo 🌍")
 
+#dataframe per gli anni delle olimpiadi
 years = medals.select("Year").unique().sort("Year").to_series().to_list()
 df_years = pl.DataFrame({"Year": years})
 noyears = [year for year in list(range(1896, 2025, 4))  if year not in years]
 df_noyears = pl.DataFrame({"Year": noyears})
 df_allyears = pl.concat([df_years, df_noyears]).sort("Year")
 
+#lista delle nazioni
 nations = medals.select("Nation").unique().sort("Nation").to_series().to_list()
 
+#aggiunta colonna % medaglie d'oro
 medals = medals.with_columns((pl.col("Gold") / pl.col("Total") * 100).alias("Gold%"))
+
+#df aggregato per nazione
 top_nations = (medals
               .group_by("Nation")
               .agg([pl.col("Gold").sum().alias("Gold"),
@@ -68,8 +74,8 @@ top_nations = (medals
               )
 )
 
+#tidy del df delle città
 cities = cities.filter(~pl.col("Summer").is_null())
-cities = cities.filter(~pl.col("Year").is_in(noyears))
 cities = cities.filter(pl.col("Year").is_in(years))
 cities = cities.select(pl.col("City"), 
                        pl.col("Nation"), 
@@ -77,6 +83,7 @@ cities = cities.select(pl.col("City"),
                        pl.col("Region"), 
                        pl.col("Opening ceremony"), 
                        pl.col("Closing ceremony"))
+#creazione nuove colonne con le date di apertura e chiusura dei giochi
 cities = cities.with_columns(
     pl.col("Opening ceremony")
     .str.strptime(pl.Date, "%d %B %Y", strict = False)
@@ -86,6 +93,7 @@ cities = cities.with_columns(
     .str.strptime(pl.Date, "%d %B %Y", strict = False)
     .alias("Closing date")   
 )
+#nuova colonna: durata in giorni dei giochi
 cities = cities.with_columns(
     ((pl.col("Closing date") - pl.col("Opening date"))
      .cast(pl.Int64)/ (1000 * 60 * 60 * 24) + 1)
@@ -93,17 +101,23 @@ cities = cities.with_columns(
      .alias("Days")
 )
 
+st.markdown("---")
 
 #SEZIONE PER NAZIONE
-st.markdown("""<h2>• Analisi per Nazione </h2>""",
-            unsafe_allow_html = True)
+st.markdown(
+    """
+    <div style="background-color: #f0f8ff; border-radius: 10px;">
+    <h2> Analisi per Nazione </h2>
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 st.markdown("""<h3> 📊 Top 10 Nazioni per totale di medaglie </h3>""",
             unsafe_allow_html = True)
-# ordino in base alla modalità scelta
+
+#ordino in base alla modalità scelta
 option = st.selectbox("Seleziona un criterio per ordinare:", ["Totale", "Oro", "Argento", "Bronzo"])
-
-
 sub_title = ""
 if option == "Totale":
     criteria = ["Total", "Gold", "Silver", "Bronze"]
@@ -119,9 +133,11 @@ elif option == "Bronzo":
     sub_title = "Top **10** nazioni ordinate per n° di **bronzi** vinti"
 top_nations = top_nations.sort(by = criteria, descending = [True] * 4)
 
-# metto colonna rank all'inizio del df
+#metto colonna rank all'inizio del df
 col_rank = pl.Series("Rank", list(range(1, len(top_nations) + 1)))
 top_nations = top_nations.insert_column(0, col_rank)
+
+#creo tabella great table
 top_table = (
     GT(data = top_nations.head(10))
     .tab_header(
@@ -154,13 +170,25 @@ top_table = (
 )
 st.html(top_table)
 
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questo grafico rappresenta la distribuzione percentuale delle medaglie d'oro, d'argento e di bronzo per le prime 10 nazioni nel ranking. 
+    Ogni sezione dell'arco indica la percentuale relativa del tipo di medaglia, mentre il numero totale di medaglie e la loro suddivisione sono riportati
+    direttamente all'interno del grafico.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
 #creo grafici a torta delle top 10 nazioni
 pie_data = (top_nations
             .head(10)
             .with_columns(
-                (pl.col("Gold") / pl.col("Total") * 100).round(decimals=2).cast(pl.Float64).alias("Gold_f"),
-                (pl.col("Silver") / pl.col("Total") * 100).round(decimals=2).cast(pl.Float64).alias("Silver_f"),
-                (pl.col("Bronze") / pl.col("Total") * 100).round(decimals=2).cast(pl.Float64).alias("Bronze_f")
+                (pl.col("Gold") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Gold_f"),
+                (pl.col("Silver") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Silver_f"),
+                (pl.col("Bronze") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Bronze_f")
             )
             .unpivot(
                 index = "Nation",
@@ -169,7 +197,7 @@ pie_data = (top_nations
                 variable_name = "Type"
             )
             .with_columns(
-                pl.col("Type").str.replace("_f", "", literal=False),
+                pl.col("Type").str.replace("_f", "", literal = False),
             )
             .with_columns(
                 pl.col("Frac").cast(pl.Float64)
@@ -211,7 +239,7 @@ pie_chart = (base_pie
                  alt.Color(
                      "Type", 
                      scale = alt.Scale(domain = ["Gold", "Silver", "Bronze"], range = ["#FFD700", "#C0C0C0", "#CD7F32"]),
-                     legend = None
+                     legend = alt.Legend(orient = "top", title = None)
                  ),
                  alt.Order("Order", sort = "ascending"),
                  tooltip = [                   
@@ -247,7 +275,7 @@ st.altair_chart((pie_chart + text_chart + big_text_chart)
 
 
 
-st.markdown("""<h3> 📈 Serie temporale delle medaglie </h3>""",
+st.markdown("""<h3> ⏳ Serie temporale delle medaglie </h3>""",
             unsafe_allow_html = True)
 selected_nations = st.multiselect(
     "Seleziona uno o più stati",
@@ -255,7 +283,20 @@ selected_nations = st.multiselect(
     max_selections = 4,
     default = "Italy"
 )
-# selezione delle nazioni e aggregazione per anno
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questo grafico mostra l'evoluzione nel tempo delle medaglie vinte dagli stati selezionati. Utilizzando il filtro in alto, puoi scegliere fino a 
+    quattro stati da confrontare tra loro. Il limite di quattro stati è stato imposto esclusivamente per mantenere il grafico leggibile e non 
+    sovraccaricarlo di dati
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#selezione delle nazioni e aggregazione per anno
 ts_data = (medals
            .filter(pl.col("Nation").is_in(selected_nations))
            .group_by(["Year", "Nation"])
@@ -266,7 +307,7 @@ ts_data = (medals
                pl.col("Total").sum().alias("Total")
            ])
 )
-# creo serie temporale
+#creo serie temporale
 empty_chart = (
     alt.Chart(df_allyears)
     .mark_line(opacity=0) 
@@ -302,12 +343,13 @@ point_chart = (
         ]
     )
 )
-# aggiungo anni in cui non sono avvenute le olimpiadi
+#aggiungo anni in cui non sono avvenute le olimpiadi
 year_chart = (
     alt.Chart(df_noyears)
     .mark_rect(opacity = 0.4, color = "red") 
     .encode(alt.X("Year:O"))
 )
+
 st.altair_chart(
     (empty_chart + line_chart + point_chart + year_chart)
     .properties(title = f"Serie Temporale delle Medaglie - {', '.join(selected_nations)}")
@@ -315,31 +357,46 @@ st.altair_chart(
     use_container_width = True
 )
 
+
+
 st.markdown("""<h3> 📈 Relazione tra medaglie ed edizioni </h3>""",
             unsafe_allow_html = True)
-# aggiungo il numero di edizioni olimpiche partecipate al df
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico rappresenta la relazione tra il totale delle medaglie vinte e il numero di edizioni olimpiche a cui ciascuna nazione ha partecipato.  
+    I punti indicano i valori reali, con la dimensione e il colore proporzionali al totale delle medaglie vinte (in scala logaritmica). La linea rossa 
+    rappresenta il modello di regressione esponenziale, che evidenzia la relazione stimata tra le due variabili.  
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#aggiungo il numero di edizioni olimpiche partecipate al df
 nation_editions = (medals
                    .group_by("Nation")
                    .agg([pl.col("Year").n_unique().alias("Ol_ed")])
 )
 top_nations = top_nations.join(nation_editions, on = "Nation")
-# trasformo in logartimo
+#trasformo in logartimo
 top_nations = top_nations.with_columns(
     (pl.col("Total").log()).alias("Log_Total")
 )
-# creo modello lineare
+#creo modello lineare
 x = top_nations["Ol_ed"].to_numpy()
 y = top_nations["Log_Total"].to_numpy()
 x = sm.add_constant(x)
 model = sm.OLS(y, x).fit()
-beta_0 = np.exp(model.params[0])
-beta_1 = model.params[1]
-# aggiungo valori predetti al df
+a = np.exp(model.params[0])
+b = model.params[1]
+#aggiungo valori predetti al df
 top_nations = top_nations.with_columns(
-    (beta_0 * np.exp(beta_1 * pl.col("Ol_ed"))).alias("Predicted")
+    (a * np.exp(b * pl.col("Ol_ed"))).alias("Predicted")
 )
 
-# creo grafico
+#creo grafico
 point_chart = (alt.Chart(top_nations)
           .mark_circle(size = 100, stroke = "black", strokeWidth = 0.5)
           .encode(
@@ -366,26 +423,76 @@ st.altair_chart((point_chart + regr_line)
                 .configure_title(anchor = "middle"),
                 use_container_width = True)
 
+#commento
+st.markdown(
+    """
+    <div class = "description-top">
+    Dopo aver analizzato la distribuzione delle medaglie, si evince che esiste un forte effetto di tipo esponenziale tra il numero di edizioni olimpiche 
+    e il numero di medaglie. Questo significa che con l'aumento delle edizioni olimpiche si osserva un incremento esponenziale del totale delle medaglie.
+    Il modello di regressione mostra una chiara relazione esponenziale, confermata dai dati. 
+    Di seguito è mostrato il modello esponenziale che rappresenta questa relazione:
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+st.latex(r'''y = a \cdot e^{b \cdot x}''')
+st.markdown(
+    f"""
+    <div class = "description-bottom">
+    Il modello esponenziale sopra riportato si basa sull'analisi statistica dei dati e può essere interpretato come segue:
+    y è il numero previsto di medaglie d'oro, x è il numero di edizioni olimpiche, a è il fattore moltiplicativo e vale {a:.2f}, mentre b è il 
+    coefficiente di crescita esponenziale della relazione esponenziale e vale {b:.2f}.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+st.markdown("---")
 
 #SEZIONE PER EDIZIONE
-st.markdown("""<h2>• Analisi per Edizione </h2>""",
-            unsafe_allow_html = True)
+st.markdown(
+    """
+    <div style = "background-color: #f0f8ff; border-radius: 10px;">
+    <h2> Analisi per Edizione </h2>
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 st.markdown("""<h3> 📊 Top 10 Nazioni per totale di medaglie per edizione </h3>""",
             unsafe_allow_html = True)
+
 year = st.selectbox("Seleziona l'anno:", years)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico mostra le prime 10 nazioni per numero totale di medaglie nell'anno selezionato (utilizza la barra in alto per selezionare un anno). 
+    Le barre rappresentano il numero totale di medaglie vinte da ciascuna nazione, mentre il colore delle barre riflette la percentuale di medaglie 
+    d'oro rispetto al totale delle medaglie vinte dalla nazione stessa con una scala cromatica che va dal giallo fino all'arancione intenso.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#df filtrato per anno selezionato
 top_10year = (medals
-        .filter(pl.col("Year") == year)
-        .sort("Total", descending = True).head(10)
-        )
+              .filter(pl.col("Year") == year)
+              .sort("Total", descending = True).head(10)
+)
+
+#creo grafico
 chart = (
     alt.Chart(top_10year)
     .mark_bar()
     .encode(
-        alt.X("Nation", sort="-y", title="Nazione"),
-        alt.Y("Total", title="Totale medaglie"),
-        alt.Color("Gold%", title="% Medaglie d'Oro", scale=alt.Scale(scheme="goldorange", domain=[0, 100])),
-        tooltip=[
+        alt.X("Nation:N", sort = "-y", title = "Nazione"),
+        alt.Y("Total:Q", title = "Totale medaglie"),
+        alt.Color("Gold%:Q", 
+                  title = "% Medaglie d'Oro", 
+                  scale = alt.Scale(scheme = "goldorange", domain = [0, 100])),
+        tooltip = [
             alt.Tooltip("Nation:N", title = "Nazione"),
             alt.Tooltip("Gold:Q", title = "Ori"),
             alt.Tooltip("Silver:Q", title = "Argenti"),
@@ -393,11 +500,30 @@ chart = (
             alt.Tooltip("Total:Q", title = "Totale")
         ])
 )
+
 st.altair_chart(chart, 
                 use_container_width = True)
 
 
 
+st.markdown("""<h3> 📈 Evoluzione delle medaglie assegnate </h3>""", 
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico mostra l'evoluzione nel tempo del totale delle medaglie assegnate nelle Olimpiadi. Le linee indicano l'andamento delle medaglie totali, 
+    mentre i punti evidenziano i valori per ciascun anno. Si osserva un trend crescente nel numero di medaglie assegnate, con un aumento particolarmente 
+    significativo dagli anni '60 fino ai primi anni 2000. Tuttavia è importante notare che alcune medaglie assegnate a delegazioni olimpiche 
+    non riconducibili a una nazione sono state rimosse dal dataset iniziale. Nonostante ciò, queste medaglie non hanno un impatto sostanziale 
+    sull'andamento del grafico.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#df del totale delle medaglie per ogni anno
 medals_years = (
     medals
     .group_by("Year")
@@ -408,6 +534,8 @@ medals_years = (
         pl.col("Total").sum().alias("Total")
         ])
 )
+
+#creo grafico
 line_chart = (
     alt.Chart(medals_years)
     .mark_line()
@@ -432,6 +560,7 @@ point_chart = (
         ]
     )
 )
+
 st.altair_chart((line_chart + point_chart + year_chart)
                 .properties(title="Evoluzione delle Medaglie Totali Assegnate")
                 .configure_title(anchor = "middle"), 
@@ -439,20 +568,39 @@ st.altair_chart((line_chart + point_chart + year_chart)
 
 
 
+st.markdown("""<h3> 🍰 Distribuzione delle edinizioni olimpiche per continente </h3>""", 
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico mostra la distribuzione delle Olimpiadi per continente, ogni segmento del grafico corrisponde a un continente e la sua grandezza è 
+    proporzionale al numero di edizioni olimpiche ospitate da ciascun continente. Dal grafico si può osservare una netta predominanza di alcuni 
+    continenti in termini di edizioni olimpiche ospitate con un focus particolare sull'Europa e l'America del Nord che hanno ospitato la maggior 
+    parte delle Olimpiadi nel corso della storia.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#df edizioni raggruppate per continente
 region_data = (
     cities
     .group_by("Region")
     .agg(pl.col("Year").count().alias("Count"))
-    .sort("Count", descending=True)
+    .sort("Count", descending = True)
 )
+
+#creo grafico
 pie_chart = (
     alt.Chart(region_data)
     .mark_arc(radius = 70, radius2 = 100, cornerRadius = 10)
     .encode(
         alt.Theta("Count:Q", title = "Numero di edizioni"),
-        alt.Color("Region:N", title = "Contiente"),
+        alt.Color("Region:N", title = "Contiente", scale = alt.Scale(scheme = "set1")),
         alt.Order("Count:Q", sort = "descending"),
-        tooltip=[
+        tooltip = [
             alt.Tooltip("Region:N", title = "Contiente"),
             alt.Tooltip("Count:Q", title = "Numero di edizioni")
         ]
@@ -463,9 +611,10 @@ big_text_chart = (alt.Chart(pl.DataFrame({"Count" : region_data["Count"].sum()})
                   .mark_text(size = 70, radius = 0)
                   .encode(alt.Text("Count"))
 )
+
 st.altair_chart((pie_chart + big_text_chart)
                 .properties(title = "Distribuzione delle Olimpiadi per continente")
-    .configure_title(anchor = "middle"), 
+                .configure_title(anchor = "middle"), 
                 use_container_width = True)
 
 
@@ -478,9 +627,25 @@ hosting_cities = (
 
 #st.dataframe(hosting_cities)
 
+st.markdown("""<h3> 🔍 Prestazioni olimpiche dei paesi ospitanti </h3>""", 
+            unsafe_allow_html = True)
 
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico mostra le prestazioni olimpiche dei paesi ospitanti, suddivisi in due gruppi per rendere visivamente più chiari i box-plot.
+    Ogni gruppo è rappresentato da un boxplot che visualizza la distribuzione delle medaglie totali per ciascun paese. I punti color ciano nel grafico 
+    rappresentano i dati specifici di ciascun paese, con dettagli sulle medaglie d'oro, argento e bronzo nell'anno in cui hanno ospitato i giochi.
+    Questo grafico ha come obiettivo analizzare se ospitare un'Olimpiade possa essere benefico per il paese ospitante in termini di performance.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+#df medaglie paesi opspitanti (tutti gli anni)
 host_nations = cities.select("Nation").unique().sort("Nation").to_series().to_list()
 all_continents = cities.select("Region").unique().to_series().to_list()
+#divido a metà per convenzione
 half = len(host_nations) // 2
 g1 = host_nations[:half]
 g2 = host_nations[half:]
@@ -498,6 +663,7 @@ g2_medals = (
           on = "Nation",
           how = "left")
 )
+#performance olimpiche dei paesi mentre ospitavano
 host_perf = (
     medals
     .join(cities,
@@ -507,6 +673,8 @@ host_perf = (
 )
 host_perf1 = host_perf.filter(pl.col("Nation").is_in(g1))
 host_perf2 = host_perf.filter(pl.col("Nation").is_in(g2))
+
+#creo i due boxplot
 boxplot1 = (
     alt.Chart(g1_medals)
     .mark_boxplot(size = 45)
@@ -515,8 +683,8 @@ boxplot1 = (
         alt.Y("Total:Q", title = "Totale medaglie", scale = alt.Scale(domain = [0, 240])),
         alt.Color(
             "Region:N",
-            title="Continente",
-            scale=alt.Scale(domain = all_continents), 
+            title = "Continente",
+            scale = alt.Scale(scheme = "set1"), 
             legend = alt.Legend(orient = "top", titleAnchor = "middle") 
         )
     )
@@ -532,11 +700,10 @@ boxplot2 = (
 )
 point_chart1 = (
     alt.Chart(host_perf1)
-    .mark_point(shape = "circle", size = 100, filled = True)
+    .mark_point(shape = "circle", size = 100, filled = True, color = "cyan")
     .encode(
         alt.X("Nation:N"),
         alt.Y("Total:Q"),
-        color = alt.value("purple"),
         tooltip = [
             alt.Tooltip("Nation:N", title = "Nazione"),
             alt.Tooltip("Year:O", title = "Anno"),
@@ -549,11 +716,10 @@ point_chart1 = (
 )
 point_chart2 = (
     alt.Chart(host_perf2)
-    .mark_point(shape = "circle", size = 100, filled = True)
+    .mark_point(shape = "circle", size = 100, filled = True, color = "cyan")
     .encode(
         alt.X("Nation:N"),
         alt.Y("Total:Q"),
-        color = alt.value("purple"),
         tooltip = [
             alt.Tooltip("Nation:N", title = "Nazione"),
             alt.Tooltip("Year:O", title = "Anno"),
@@ -568,5 +734,30 @@ final_chart = (
     alt.vconcat((boxplot1 + point_chart1), (boxplot2 + point_chart2))
     .resolve_scale(color = "shared")
 )
+
 st.altair_chart(final_chart,
                 use_container_width = True)
+
+#commento
+st.markdown(
+    """
+    <div class = "description">
+    Dal grafico si evince che la maggior parte dei punti color ciano si trovano nella parte alta dei boxplot, indicando un trend positivo: ospitare le 
+    Olimpiadi sembra avere un impatto positivo sul numero di medaglie vinte. Tuttavia ci sono delle eccezioni come la Finlandia, i Paesi Bassi e il 
+    Canada dove le prestazioni non mostrano un miglioramento significativo. Nonostante queste eccezioni, l'andamento generale suggerisce che 
+    ospitare le Olimpiadi possa influenzare positivamente il paese ospitante in termini di medaglie.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#footer
+st.markdown(
+    """
+    <div class = "footer">
+        © 2024 - Creato usando <a href = "https://streamlit.io/">Streamlit</a> 
+        <br>Created by <b>Enrico Sorgato</b>
+    </div>
+    """,
+    unsafe_allow_html = True
+)

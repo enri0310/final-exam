@@ -16,12 +16,12 @@ with col2:
     )
 
 st.markdown(
-    "<h1>Gloria e medaglie: scopri le prestazioni olimpiche delle nazioni</h1>",
-    unsafe_allow_html=True
+    "<h1> Gloria e medaglie: scopri le prestazioni olimpiche delle nazioni </h1>",
+    unsafe_allow_html = True
 )
 st.markdown(
-    "<h3>Un viaggio attraverso i successi delle nazioni nelle Olimpiadi estive, dal passato glorioso al presente</h3>",
-    unsafe_allow_html=True
+    "<h3> Un viaggio attraverso i successi delle nazioni nelle Olimpiadi estive, dal passato glorioso al presente </h3>",
+    unsafe_allow_html = True
 )
 
 st.markdown(
@@ -31,7 +31,7 @@ st.markdown(
     una celebrazione dello sport che unisce atleti e nazioni da tutto il mondo.
     </p>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html = True
 )
 
 st.markdown("---")
@@ -51,8 +51,8 @@ st.markdown("""
             ogni quattro anni in sede diversa: le O. di Atene, di Roma, di Monaco, di Mosca, di Pechino. Dal 1924 si svolgono inoltre le o. invernali,
             anch’esse ogni quattro anni, che sono dedicate agli sport della neve e del ghiaccio e hanno luogo in un paese diverso da quello che 
             organizza i giochi olimpici, con uno scarto di due anni rispetto a questi ultimi.
-    <div style="text-align: right;"> - 
-    <a href="https://www.treccani.it/vocabolario/olimpiade/">Enciclopedia Treccani</a>
+    <div style = "text-align: right;"> - 
+    <a href = "https://www.treccani.it/vocabolario/olimpiade/">Enciclopedia Treccani</a>
     </div>
     </div>
     """, 
@@ -270,12 +270,12 @@ st.markdown("---")
 
 # Sezione Fonti e Crediti
 st.markdown("""<h3>📌 Fonti</h3>""",
-            unsafe_allow_html=True)
+            unsafe_allow_html = True)
 st.markdown(
     """
     <p>
         Le informazioni sui medaglieri sono state raccolte da dati pubblici disponibili su 
-        <a href="https://en.wikipedia.org/wiki/Main_Page">
+        <a href = "https://en.wikipedia.org/wiki/Main_Page">
         Wikipedia</a>.
         <br>
         Per trasparenza e per permettere ulteriori analisi, puoi scaricare tutti i file CSV utilizzati in un unico archivio.
@@ -284,7 +284,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-'''col1, col2, col3 = st.columns([2, 2, 2])  # Tre colonne, la centrale più larga
+col1, col2, col3 = st.columns([2, 2, 2])  # Tre colonne, la centrale più larga
 with col2:
     with open("dataframes/dataframes.zip", "rb") as fp:
         btn = st.download_button(
@@ -293,14 +293,14 @@ with col2:
             file_name = "dataframes.zip",
             mime = "application/zip",
             use_container_width = True
-        )'''
+        )
 
 
-# Footer
+#footer
 st.markdown(
     """
-    <div class="footer">
-        © 2024 - Creato usando <a href="https://streamlit.io/">Streamlit</a> 
+    <div class = "footer">
+        © 2024 - Creato usando <a href = "https://streamlit.io/">Streamlit</a> 
         <br>Created by <b>Enrico Sorgato</b>
     </div>
     """,
