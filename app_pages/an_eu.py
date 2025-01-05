@@ -10,7 +10,7 @@ utl.setup_page(
     layout = "centered"
 )
 
-#dataset
+#import dataset
 medals = st.session_state.medal
 europe = st.session_state.europe
 medals = medals.with_columns(
@@ -30,12 +30,47 @@ medals = (medals
 )
 eu_medals = (
     medals
-    .join(europe.rename({"Year": "eu_Year"}), on="Nation", how="left") 
+    .join(europe.rename({"Year": "eu_Year"}), on = "Nation", how = "left") 
     .filter(pl.col("Year") >= pl.col("eu_Year"))  
 )
 
-st.title("Analisi delle Medaglie Olimpiche in Unione Europea 🤝")
+st.title("Analisi delle medaglie olimpiche in Unione Europea 🤝")
 
+#commento introduttivo
+st.markdown(
+    """
+    <p>
+    In questa pagina è possibile esplorare le performance delle nazioni dell'Unione Europea ai giochi olimpici. Attraverso grafici interattivi e mappe, 
+    vengono analizzati le medaglie conquistate dai paesi membri, il loro contributo storico e l'evoluzione delle prestazioni nel tempo, sia prima che 
+    dopo il loro ingresso nell'UE.
+    <br>
+    Per ragioni computazionali, le medaglie della Germania Est e della Germania Ovest sono state unite e considerate come un'unica nazione. Inoltre si 
+    è scelto di utilizzare il 1958 come data di ingresso nell'UE per la Germania, anche se all'epoca il paese era diviso e solo la Germania Ovest 
+    faceva parte della Comunità Europea.
+    <br>
+    Per correttezza è giusto sottolineare che il dataset analizzato prende in considerazione le medaglie vinte dalle nazioni a partire dalla prima 
+    edizione delle Olimpiadi in cui tali nazioni sono entrate nell'Unione Europea. Per esempio, per la Spagna vengono considerate le medaglie vinte 
+    alle Olimpiadi di Seoul 1988 e in tutte le edizioni successive visto che la Spagna è entrata nell'UE nel 1986.
+    </p>
+    """,
+    unsafe_allow_html = True
+)
+
+st.markdown("""<h3> 🌍 Distribuzione geografica delle Nazioni dell'Unione Europea </h3>""",
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questa mappa rappresenta evidenzia i paesi aderenti all'Unione Europea e il colore indica l'anno in cui la nazione 
+    è entrata nell'UE. In blu si possono notare i sei paesi fondatori: Germania, Francia, Italia, Paesi Bassi, Belgio e Lussemburgo.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#creo mappa del mondo e coloro di grigio chiaro
 world = utl.get_geography()
 chartwrl = (
     alt.Chart(world)
@@ -43,7 +78,7 @@ chartwrl = (
     .encode(color = alt.value("lightgrey"))
     .properties(width = 600, height = 600)
 )
-
+#creo mappa dell'UE e differenzio per anno
 eu_nations = world.merge(
     europe.to_pandas(),
     left_on = "ADMIN",
@@ -59,6 +94,7 @@ charteu = (
                   title = "Anno")
     )
 )
+#mappa finale
 chart = ((chartwrl + charteu )
          .properties(width = 600, height = 600)
          .project(
@@ -67,8 +103,25 @@ chart = ((chartwrl + charteu )
              center = (10, 48)
          )
 )
-#utl.open_map(chart, "eu_year")
 
+utl.open_map(chart, "eu_year")
+
+
+
+st.markdown("""<h3> 🥇 Performance olimpiche totali delle Nazioni </h3>""",
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico a barre mostra il numero totale di medaglie olimpiche vinte da ciascuna nazione.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#creo grafico
 medal_counts = (
     eu_medals
     .group_by("Nation")
@@ -100,18 +153,37 @@ chart = (
     .properties(title = "Totale medaglie olimpiche per paese dell'UE",)
     .configure_title(anchor = "middle")
 )
+
 st.altair_chart(chart, 
                 use_container_width = True)
 
 
+
+st.markdown("""<h3> ⚖️ Confronto tra le Nazioni e tipoligia di medaglie </h3>""",
+            unsafe_allow_html = True)
+
+#lista nazioni
 nations = eu_medals.select("Nation").unique().sort("Nation").to_series().to_list()
 
 selected_nations = st.multiselect(
     "Seleziona uno o più stati",
     nations,
-    max_selections = 4,
+    max_selections = 3,
     default = ["Italy", "France", "Spain"]
 )
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questo grafico confronta i tipi di medaglie vinte da un massimo di 3 nazioni selezionate. Ogni barra rappresenta il totale per una specifica 
+    tipologia di medaglia e fornisce un'analisi comparativa visiva.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#greo grafico
 chart_data = (medals
            .filter(pl.col("Nation").is_in(selected_nations))
            .group_by(["Nation"])
@@ -145,7 +217,7 @@ chart = (alt.Chart(chart_data)
                 scale = alt.Scale(domain = ["Gold", "Silver", "Bronze"], range = ["#FFD700", "#C0C0C0", "#CD7F32"])
             ),
             tooltip = [
-                alt.Tooltip("Nation:N", title="Nazione"),
+                alt.Tooltip("Nation:N", title = "Nazione"),
                 alt.Tooltip("Type:N", title = "Tipo di medaglia"),
                 alt.Tooltip("Count:Q", title = "Quantità")
             ]
@@ -154,30 +226,78 @@ chart = (alt.Chart(chart_data)
         .configure_title(anchor = "middle")
 )
 
-# Visualizzazione con Streamlit
-st.altair_chart(chart, use_container_width=True)
 
-
-chart = (
-    alt.Chart(eu_medals)
-    .mark_rect()
-    .encode(
-        alt.X("Year:O", title="Anno"),
-        alt.Y("Nation:N", title="Nazione"),
-        alt.Color("Total:Q", scale = alt.Scale(type = "log", scheme = "bluepurple"), title = "Totale medaglie"),
-        tooltip=[
-            alt.Tooltip("Nation:N", title="Nazione"),
-            alt.Tooltip("Year:O", title="Anno"),
-            alt.Tooltip("Total:Q", title="Totale medaglie")
-        ]
-    )
-    .properties(title="Totale medaglie per anno e nazione")
-    .configure_title(anchor = "middle")
-)
 st.altair_chart(chart, 
                 use_container_width = True)
 
 
+
+st.markdown("""<h3> 📊 Totale delle medaglie nel tempo </h3>""",
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questa heatmap visualizza l'andamento delle medaglie totali conquistate da ciascuna nazione dell'Unione Europea nel corso degli anni. 
+    Le sfumature più scure indicano una maggiore quantità di medaglie permettendo di osservare i picchi nelle performance olimpiche 
+    delle nazioni nel tempo.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#creo grafico
+chart = (
+    alt.Chart(eu_medals)
+    .mark_rect()
+    .encode(
+        alt.X("Year:O", title = "Anno"),
+        alt.Y("Nation:N", title = "Nazione"),
+        alt.Color("Total:Q", scale = alt.Scale(type = "log", scheme = "bluepurple"), title = "Totale medaglie"),
+        tooltip=[
+            alt.Tooltip("Nation:N", title = "Nazione"),
+            alt.Tooltip("Year:O", title = "Anno"),
+            alt.Tooltip("Total:Q", title = "Totale medaglie")
+        ]
+    )
+    .properties(title ="Totale medaglie per anno e nazione")
+    .configure_title(anchor = "middle")
+)
+
+st.altair_chart(chart, 
+                use_container_width = True)
+
+#commento
+st.markdown(
+    """
+    <div class = "description">
+    Dalla heatmap emerge chiaramente che nazioni come Francia, Germania e Italia hanno un ruolo centrale nel medagliere totale dell'Unione Europea,
+    infatti i loro colori sono molto intensi rappresendando così il loro costante successo olimpico nel corso degli anni. 
+    Anche i Paesi Bassi pur partendo da una posizione meno prominente hanno mostrato un crescente impatto soprattutto nelle edizioni recenti,
+    dimostrando una crescente influenza sul totale delle medaglie.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+
+
+st.markdown("""<h3> 🗺️ Mappa geografica delle medaglie olimpiche </h3>""",
+            unsafe_allow_html = True)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    La mappa rappresenta il totale delle medaglie olimpiche vinte da ciascuna nazione europea. Il colore indica diverse categorie di medaglie 
+    con sfumature più scure che rappresentano performance più elevate. Utile per comprendere la distribuzione geografica delle performance.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+#creo livelli per le medaglie
 bins = [0, 5, 10, 25, 50, 100, 250, 500, 750, np.inf]
 labels = [">=0", ">=5", ">=15", ">=25", ">=30", ">=50", ">=75", ">=100", ">=300", ">=500"]
 medals_data = medal_counts.with_columns(
@@ -198,6 +318,8 @@ medals_data = world.merge(
     left_on = "ADMIN",
     right_on = "Nation"
 )
+
+#creo mappa
 charteu = (
     alt.Chart(medals_data)
     .mark_geoshape()
@@ -220,6 +342,19 @@ chart = ((chartwrl + charteu )
              center = (10, 48)
          )
 )
+
 utl.open_map(chart, "europe_medals")
+
+st.markdown(
+    """
+    <div class = "description">
+    La mappa evidenzia chiaramente il ruolo centrale di nazioni come Francia, Italia e Germania nel medagliere totale dell'Unione Europea.
+    Questi paesi si distinguono per il loro costante successo olimpico nel corso degli anni. Al contrario è evidente come i paesi dell'Est Europa 
+    abbiano avuto un impatto marginale sul totale delle medaglie. Questo suggerisce una partecipazione meno significativa da 
+    parte di queste nazioni che non hanno raggiunto gli stessi livelli di performance degli altri paesi europei.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 

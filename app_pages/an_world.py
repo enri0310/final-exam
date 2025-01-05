@@ -62,6 +62,7 @@ st.markdown(
     """,
     unsafe_allow_html = True
 )
+
 #dataframe per gli anni delle olimpiadi
 years = medals.select("Year").unique().sort("Year").to_series().to_list()
 df_years = pl.DataFrame({"Year": years})
@@ -148,16 +149,16 @@ top_nations = top_nations.sort(by = criteria, descending = [True] * 4)
 col_rank = pl.Series("Rank", list(range(1, len(top_nations) + 1)))
 top_nations = top_nations.insert_column(0, col_rank)
 
-#descrizione
 st.markdown(
     """
     <div class = "description">
-    Questo modulo offre una panoramica delle nazioni che hanno dominato il panorama olimpico, classificandole in base al numero totale di medaglie 
+    Questa tabella mostra il ranking delle nazioni che hanno dominato le competizioni olimpiche classificandole in base al numero totale di medaglie 
     vinte e ai vari metalli (oro, argento e bronzo). Utilizzando il menu a tendina è possibile ordinare le nazioni secondo il criterio che si preferisce.
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html = True
 )
+
 
 #creo tabella great table
 top_table = (
@@ -195,14 +196,15 @@ st.html(top_table)
 #descrizione
 st.markdown(
     """
-    <div class = "description">
-    Questo grafico rappresenta la distribuzione percentuale delle medaglie d'oro, d'argento e di bronzo per le prime 10 nazioni nel ranking. 
-    Ogni sezione dell'arco indica la percentuale relativa del tipo di medaglia, mentre il numero totale di medaglie e la loro suddivisione sono riportati
-    direttamente all'interno del grafico.
+    <div class="description">
+    Questi grafici a torta visualizzano la distribuzione percentuale delle medaglie d'oro, d'argento e di bronzo per le prime 10 nazioni nel ranking 
+    olimpico. Ogni segmento dell'arco rappresenta la percentuale di ciascun tipo di medaglia, mentre il totale delle medaglie è visibile al centro di 
+    ogni grafico, mentre i totali per ogni tipo di medaglia son riportati si lato ad ogni segmento
     </div>
     """,
     unsafe_allow_html = True
 )
+
 
 #creo grafici a torta delle top 10 nazioni
 pie_data = (top_nations
@@ -310,9 +312,10 @@ selected_nations = st.multiselect(
 st.markdown(
     """
     <div class = "description">
-    Questo grafico mostra l'evoluzione nel tempo delle medaglie vinte dagli stati selezionati. Utilizzando il filtro in alto, puoi scegliere fino a 
+    Questo grafico mostra l'evoluzione nel tempo delle medaglie vinte dagli stati selezionati. Le barre rosse indicano gli anni in cui le Olimpiadi non 
+    si sono svolte a causa delle due guerre mondiali (1916, 1940 e 1944). Utilizzando il filtro in alto, è possibile scegliere fino a 
     quattro stati da confrontare tra loro. Il limite di quattro stati è stato imposto esclusivamente per mantenere il grafico leggibile e non 
-    sovraccaricarlo di dati
+    sovraccaricarlo di dati.
     </div>
     """,
     unsafe_allow_html = True
@@ -388,9 +391,10 @@ st.markdown("""<h3> 📈 Relazione tra medaglie ed edizioni </h3>""",
 st.markdown(
     """
     <div class = "description">
-    Il grafico rappresenta la relazione tra il totale delle medaglie vinte e il numero di edizioni olimpiche a cui ciascuna nazione ha partecipato.  
-    I punti indicano i valori reali, con la dimensione e il colore proporzionali al totale delle medaglie vinte (in scala logaritmica). La linea rossa 
-    rappresenta il modello di regressione esponenziale, che evidenzia la relazione stimata tra le due variabili.  
+    Il grafico rappresenta la relazione tra il totale delle medaglie vinte e il numero di edizioni olimpiche a cui ciascuna nazione ha vinto alemno 
+    una medaglia. Il colore dei punti è proporzionale al totale delle medaglie vinte (in scala logaritmica). Si nota una relazione di tipo lineare tra
+    le due variabili, per questo motivo si è deciso di aggiungere una linea rossa la quale rappresenta il modello di regressione esponenziale calcolato 
+    attravero i dati 
     </div>
     """,
     unsafe_allow_html = True
@@ -414,9 +418,7 @@ model = sm.OLS(y, x).fit()
 a = np.exp(model.params[0])
 b = model.params[1]
 #aggiungo valori predetti al df
-top_nations = top_nations.with_columns(
-    (a * np.exp(b * pl.col("Ol_ed"))).alias("Predicted")
-)
+top_nations = top_nations.with_columns((a * np.exp(b * pl.col("Ol_ed"))).alias("Predicted"))
 
 #creo grafico
 point_chart = (alt.Chart(top_nations)
@@ -462,7 +464,7 @@ st.markdown(
     f"""
     <div class = "description-bottom">
     Il modello esponenziale sopra riportato si basa sull'analisi statistica dei dati e può essere interpretato come segue:
-    y è il numero previsto di medaglie d'oro, x è il numero di edizioni olimpiche, a è il fattore moltiplicativo e vale {a:.2f}, mentre b è il 
+    y è il numero previsto di medaglie totali, x è il numero di edizioni olimpiche, a è il fattore moltiplicativo e vale {a:.2f}, mentre b è il 
     coefficiente di crescita esponenziale della relazione esponenziale e vale {b:.2f}.
     </div>
     """,
@@ -492,7 +494,7 @@ st.markdown(
     <div class = "description">
     Il grafico mostra le prime 10 nazioni per numero totale di medaglie nell'anno selezionato (utilizza la barra in alto per selezionare un anno). 
     Le barre rappresentano il numero totale di medaglie vinte da ciascuna nazione, mentre il colore delle barre riflette la percentuale di medaglie 
-    d'oro rispetto al totale delle medaglie vinte dalla nazione stessa con una scala cromatica che va dal giallo fino all'arancione intenso.
+    d'oro rispetto al totale delle medaglie vinte dalla nazione stessa.
     </div>
     """,
     unsafe_allow_html = True
@@ -535,10 +537,10 @@ st.markdown("""<h3> 📈 Evoluzione delle medaglie assegnate </h3>""",
 st.markdown(
     """
     <div class = "description">
-    Il grafico mostra l'evoluzione nel tempo del totale delle medaglie assegnate nelle Olimpiadi. Le linee indicano l'andamento delle medaglie totali, 
+    Il grafico mostra l'evoluzione nel tempo del totale delle medaglie assegnate nelle Olimpiadi. La linea indicana l'andamento delle medaglie totali, 
     mentre i punti evidenziano i valori per ciascun anno. Si osserva un trend crescente nel numero di medaglie assegnate, con un aumento particolarmente 
     significativo dagli anni '60 fino ai primi anni 2000. Tuttavia è importante notare che alcune medaglie assegnate a delegazioni olimpiche 
-    non riconducibili a una nazione sono state rimosse dal dataset iniziale. Nonostante ciò, queste medaglie non hanno un impatto sostanziale 
+    non riconducibili a una nazione sono state rimosse dal dataset iniziale. Nonostante ciò, queste medaglie non hanno un impatto significativo 
     sull'andamento del grafico.
     </div>
     """,
@@ -597,10 +599,10 @@ st.markdown("""<h3> 🍰 Distribuzione delle edinizioni olimpiche per continente
 st.markdown(
     """
     <div class = "description">
-    Il grafico mostra la distribuzione delle Olimpiadi per continente, ogni segmento del grafico corrisponde a un continente e la sua grandezza è 
+    Il grafico mostra la distribuzione delle Olimpiadi per continente. Ogni arco della torta corrisponde a un continente e la sua grandezza è 
     proporzionale al numero di edizioni olimpiche ospitate da ciascun continente. Dal grafico si può osservare una netta predominanza di alcuni 
-    continenti in termini di edizioni olimpiche ospitate con un focus particolare sull'Europa e l'America del Nord che hanno ospitato la maggior 
-    parte delle Olimpiadi nel corso della storia.
+    continenti in termini di edizioni olimpiche ospitate con un focus particolare sull'Europa e l'America del Nord che insieme hanno ospitato i tre
+    quarti delle Olimpiadi nel corso della storia.
     </div>
     """,
     unsafe_allow_html = True
@@ -620,7 +622,7 @@ pie_chart = (
     .mark_arc(radius = 70, radius2 = 100, cornerRadius = 10)
     .encode(
         alt.Theta("Count:Q", title = "Numero di edizioni"),
-        alt.Color("Region:N", title = "Contiente", scale = alt.Scale(scheme = "set1")),
+        alt.Color("Region:N", title = "Contiente", scale = alt.Scale(scheme = "category10")),
         alt.Order("Count:Q", sort = "descending"),
         tooltip = [
             alt.Tooltip("Region:N", title = "Contiente"),
@@ -656,14 +658,15 @@ st.markdown("""<h3> 🔍 Prestazioni olimpiche dei paesi ospitanti </h3>""",
 st.markdown(
     """
     <div class = "description">
-    Il grafico mostra le prestazioni olimpiche dei paesi ospitanti, suddivisi in due gruppi per rendere visivamente più chiari i box-plot.
-    Ogni gruppo è rappresentato da un boxplot che visualizza la distribuzione delle medaglie totali per ciascun paese. I punti color ciano nel grafico 
-    rappresentano i dati specifici di ciascun paese, con dettagli sulle medaglie d'oro, argento e bronzo nell'anno in cui hanno ospitato i giochi.
-    Questo grafico ha come obiettivo analizzare se ospitare un'Olimpiade possa essere benefico per il paese ospitante in termini di performance.
+    Il grafico mostra le prestazioni olimpiche dei paesi che nel corso della storia hanno ospitato almeno un'edizione dei giochi. Per ragioni di spazio
+    e per migliorare la chiarezza visiva, i box-plot sono stati suddivisi in due gruppi. Ogni box-plot rappresenta la distribuzione delle medaglie 
+    olimpiche totali di un paese, mentre i punti di colore ciano indicano i dati specifici del paese nell'anno o negli anni in cui ha ospitato i giochi.
+    L'obiettivo di questo grafico è capire se ospitare un'Olimpiade abbia un impatto positivo sulle performance olimpiche del paese ospitante.
     </div>
     """,
     unsafe_allow_html = True
 )
+
 #df medaglie paesi opspitanti (tutti gli anni)
 host_nations = cities.select("Nation").unique().sort("Nation").to_series().to_list()
 all_continents = cities.select("Region").unique().to_series().to_list()
@@ -706,7 +709,7 @@ boxplot1 = (
         alt.Color(
             "Region:N",
             title = "Continente",
-            scale = alt.Scale(scheme = "set1"), 
+            scale = alt.Scale(scheme = "category10"), 
             legend = alt.Legend(orient = "top", titleAnchor = "middle") 
         )
     )
@@ -764,10 +767,10 @@ st.altair_chart(final_chart,
 st.markdown(
     """
     <div class = "description">
-    Dal grafico si evince che la maggior parte dei punti color ciano si trovano nella parte alta dei boxplot, indicando un trend positivo: ospitare le 
-    Olimpiadi sembra avere un impatto positivo sul numero di medaglie vinte. Tuttavia ci sono delle eccezioni come la Finlandia, i Paesi Bassi e il 
-    Canada dove le prestazioni non mostrano un miglioramento significativo. Nonostante queste eccezioni, l'andamento generale suggerisce che 
-    ospitare le Olimpiadi possa influenzare positivamente il paese ospitante in termini di medaglie.
+    Dal grafico si evince che la maggior parte dei punti color ciano si trovano nella parte alta dei boxplot indicando quindi un trend positivo: 
+    ospitare le Olimpiadi sembra avere un impatto positivo sul numero di medaglie vinte. Tuttavia ci sono delle eccezioni come la Finlandia, i Paesi Bassi
+    e il Canada dove le prestazioni non sono migliorate significativamente durante gli anni in cui hanno ospitato i giochi. Nonostante queste eccezioni, 
+    l'andamento generale suggerisce che ospitare le Olimpiadi possa avere un'influenza positiva sul paese ospitante in termini di medaglie.
     </div>
     """,
     unsafe_allow_html = True
