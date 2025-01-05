@@ -51,6 +51,17 @@ medals = (medals
 
 st.title("Analisi delle medaglie olimpiche nel Mondo 🌍")
 
+#commento introduttivo
+st.markdown(
+    """
+    <p>
+    In questa pagina è pissibile esplorare le performance delle nazioni in ogni edizione dei giochi olimpici. Sono presenti due sezioni principali: una 
+    dedicata alle prestazioni complessive delle nazioni e l'altra focalizzata sulle edizioni specifiche. 
+    Grazie alla flessibilità del pannello laterale, è possibile anche combinare i risultati di Germania Est e Ovest per un'analisi più completa. 
+    </p>
+    """,
+    unsafe_allow_html = True
+)
 #dataframe per gli anni delle olimpiadi
 years = medals.select("Year").unique().sort("Year").to_series().to_list()
 df_years = pl.DataFrame({"Year": years})
@@ -136,6 +147,17 @@ top_nations = top_nations.sort(by = criteria, descending = [True] * 4)
 #metto colonna rank all'inizio del df
 col_rank = pl.Series("Rank", list(range(1, len(top_nations) + 1)))
 top_nations = top_nations.insert_column(0, col_rank)
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Questo modulo offre una panoramica delle nazioni che hanno dominato il panorama olimpico, classificandole in base al numero totale di medaglie 
+    vinte e ai vari metalli (oro, argento e bronzo). Utilizzando il menu a tendina è possibile ordinare le nazioni secondo il criterio che si preferisce.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 #creo tabella great table
 top_table = (
@@ -755,8 +777,7 @@ st.markdown(
 st.markdown(
     """
     <div class = "footer">
-        © 2024 - Creato usando <a href = "https://streamlit.io/">Streamlit</a> 
-        <br>Created by <b>Enrico Sorgato</b>
+    Creato con ❤️ da <b>Enrico Sorgato</b> © 2025
     </div>
     """,
     unsafe_allow_html = True

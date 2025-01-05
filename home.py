@@ -274,11 +274,10 @@ st.markdown("""<h3>📌 Fonti</h3>""",
 st.markdown(
     """
     <p>
-        Le informazioni sui medaglieri sono state raccolte da dati pubblici disponibili su 
-        <a href = "https://en.wikipedia.org/wiki/Main_Page">
-        Wikipedia</a>.
-        <br>
-        Per trasparenza e per permettere ulteriori analisi, puoi scaricare tutti i file CSV utilizzati in un unico archivio.
+    Le informazioni sui medaglieri sono state raccolte da dati pubblici disponibili su 
+    <a href = "https://en.wikipedia.org/wiki/Main_Page">Wikipedia</a>.
+    <br>
+    Per trasparenza e per permettere ulteriori analisi, puoi scaricare tutti i file CSV utilizzati in un unico archivio.
     </p>
     """,
     unsafe_allow_html = True
@@ -300,8 +299,7 @@ with col2:
 st.markdown(
     """
     <div class = "footer">
-        © 2024 - Creato usando <a href = "https://streamlit.io/">Streamlit</a> 
-        <br>Created by <b>Enrico Sorgato</b>
+    Creato con ❤️ da <b>Enrico Sorgato</b> © 2025
     </div>
     """,
     unsafe_allow_html = True
