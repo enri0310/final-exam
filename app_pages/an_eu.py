@@ -358,3 +358,12 @@ st.markdown(
 )
 
 
+#footer
+st.markdown(
+    """
+    <div class = "footer">
+    Creato con ❤️ da <b>Enrico Sorgato</b> © 2025
+    </div>
+    """,
+    unsafe_allow_html = True
+)
