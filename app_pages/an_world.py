@@ -257,7 +257,7 @@ pie_data = (pie_data
 
 base_pie = alt.Chart(pie_data)
 pie_chart = (base_pie
-             .mark_arc(radius = 50, radius2 = 70, cornerRadius = 10)
+             .mark_arc(radius = 45, radius2 = 65, cornerRadius = 10)
              .encode(
                  alt.Theta("Frac"),
                  alt.Color(
@@ -271,10 +271,10 @@ pie_chart = (base_pie
                      alt.Tooltip("Frac", title = "%"),
                  ]
              )
-             .properties(width = 180, height = 220)
+             .properties(width = 175, height = 220)
 )
 text_chart = (base_pie
-              .mark_text(radius = 85)
+              .mark_text(radius = 80)
               .encode(
                   alt.Theta("Frac", stack = True),
                   alt.Text("Count"),

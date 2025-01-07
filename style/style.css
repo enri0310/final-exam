@@ -4,8 +4,10 @@ body {
 }
 
 .stApp {
-    background-image: url("https://www.damcompany.com/wp-content/uploads/2023/05/Impostare-un-colore-o-un-immagine-di-sfondo-con-i-fogli-di-stile-CSS.jpg");
-    background-size: cover;
+    background-image: url("https://static.vecteezy.com/system/resources/previews/043/532/345/non_2x/abstract-wavy-stripes-of-olympic-games-colors-isolated-on-transparent-background-illustration-free-vector.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .st-emotion-cache-yw8pof {
