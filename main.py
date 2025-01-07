@@ -13,7 +13,9 @@ if __name__ == "__main__":
             st.Page("app_pages/an_eu.py", title = "Analisi in Unione Europea", icon = "📊"),
             st.Page("app_pages/an_italy.py", title = "Analisi in Italia", icon = "📊")        
         ],
-        "Quiz": []
+        "Quiz": [
+            st.Page("quiz.py", title = "Quiz sulle Olimpiadi", icon = "❓")
+        ]
     }
 
     st.session_state.pg = st.navigation(pages)
