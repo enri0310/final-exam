@@ -46,8 +46,8 @@ def open_map(chart, name = "map"):
     path = f"map/{name}.html"
     if os.path.exists(path):
         with open(path) as fp:
-            st.components.v1.html(fp.read(), width = 800, height = 800)
+            st.components.v1.html(fp.read(), width = 800, height = 600)
     else:
         add_map(chart, name)
         with open(path) as fp:
-            st.components.v1.html(fp.read(), width = 800, height = 800)
+            st.components.v1.html(fp.read(), width = 800, height = 600)

@@ -239,7 +239,7 @@ st.markdown(
 
 
 #df città italiane
-city = pl.read_csv("map\comuni_geocoded.csv", null_values = ["NA", ""], separator = ";")
+city = pl.read_csv("map/comuni_geocoded.csv", null_values = ["NA", ""], separator = ";")
 city = (
     city
     .group_by("nome")
@@ -247,12 +247,14 @@ city = (
         pl.col("nomeProvincia").first().alias("Provincia")
     ])
 )
+#lista province italiane
+cities = city.select("Provincia").unique().to_series().to_list()
 #province italiane
 province = utl.get_region()
 province = province[province["geonunit"] == "Italy"]
 province["region"] = province["region"].str.lower()
 
-#paesi medagliati 2024
+#città medagliate 2024
 town = (
     italy2024
     .filter(pl.col("Region") != "ESTERO")
@@ -271,6 +273,7 @@ town = town.join(
     left_on = "City",
     right_on = "nome"
 )
+
 #province medagliate 2024
 provincia = (
     town
@@ -292,6 +295,8 @@ provincia = provincia.with_columns(
             .otherwise(pl.col("Provincia"))
             .alias("Provincia")
         )
+#lista province medagliate 2024
+province_list = provincia.select("Provincia").unique().to_series().to_list()
 
 #creo mappa
 provincia = province.merge(
@@ -322,8 +327,20 @@ chart = ((chartit + chartpr)
              center = (12, 42) 
          )
 )
+
 utl.open_map(chart, "province")
 
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(
+        label = "Province medagliate",
+        value = len(province_list)
+    )
+with col2:
+    st.metric(
+        label = "Province totali",
+        value = len(cities)
+    )
 
 #regioni medagliate 2024
 region2024 = region2024.with_columns(
@@ -388,7 +405,6 @@ st.markdown(
     """,
     unsafe_allow_html = True
 )
-
 
 #footer
 st.markdown(
