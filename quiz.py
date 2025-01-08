@@ -153,3 +153,13 @@ else:
         col1, col2, col3 = st.columns([2, 2, 2])
         with col2:
             st.button("Conferma risposta", key = "sub_answer", on_click = submit_answer)
+
+#footer
+st.markdown(
+    """
+    <div class = "footer">
+    Creato con ❤️ da <b>Enrico Sorgato</b> © 2025
+    </div>
+    """,
+    unsafe_allow_html = True
+)
