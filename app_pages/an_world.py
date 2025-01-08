@@ -427,7 +427,7 @@ point_chart = (alt.Chart(top_nations)
           .encode(
               alt.X("Ol_ed:Q", title = "Numero di edizioni olimpiche"),
               alt.Y("Total:Q", scale = alt.Scale(type = "log"), title = "Totale medaglie"),
-              alt.Color("Total:Q", title = "Totale medaglie").scale(scheme = "category10"),
+              alt.Color("Total:Q", title = "Totale medaglie").scale(scheme = "viridis"),
               tooltip=[
                   alt.Tooltip("Nation:N", title = "Nazione"),
                   alt.Tooltip("Total:Q", title = "Totale"),
@@ -796,10 +796,9 @@ smedals = (smedals
                  pl.col("Total").sum().alias("Total")]
            )
 )
+su_year = list(range(1952, 2025, 4))
 
-soviet_medals = medals.filter(pl.col("Nation").is_in(soviet) & (pl.col("Nation") != "Soviet Union"))
-nations = soviet_medals.select("Nation").unique().sort("Nation").to_series().to_list()
-nations
+soviet_medals = medals.filter(pl.col("Nation").is_in(soviet) & (pl.col("Nation") != "Soviet Union") & pl.col("Year").is_in(su_year))
 soviet_medals = (soviet_medals
           .group_by(["Nation", "Year"])
           .agg([pl.col("Gold").sum().alias("Gold"),
@@ -809,13 +808,13 @@ soviet_medals = (soviet_medals
            )
 )
 
-su_medals = smedals.filter(pl.col("Nation") == "Soviet Union")
+su_medals = smedals.filter((pl.col("Nation") == "Soviet Union") & pl.col("Year").is_in(su_year))
 
-line_chart = (
+su_chart = (
     alt.Chart(su_medals)
     .mark_line()
     .encode(
-        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
         alt.Y("Total:Q", title = "Totale medaglie"),
         alt.Color(
             "Nation:N", 
@@ -824,11 +823,11 @@ line_chart = (
         )
     )
 )
-point_chart = (
+su_point = (
     alt.Chart(su_medals)
     .mark_point(size = 50)
     .encode(
-        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
         alt.Y("Total:Q"),
         alt.Color("Nation:N", title = "Nazione"),
         tooltip = [
@@ -845,7 +844,7 @@ soviet_chart = (
     alt.Chart(soviet_medals)
     .mark_line()
     .encode(
-        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
         alt.Y("Total:Q", title = "Totale medaglie"),
         alt.Color(
             "Nation:N", 
@@ -858,7 +857,7 @@ soviet_point = (
     alt.Chart(soviet_medals)
     .mark_point(size = 50)
     .encode(
-        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
         alt.Y("Total:Q"),
         alt.Color("Nation:N", title = "Nazione"),
         tooltip = [
@@ -874,19 +873,19 @@ soviet_point = (
 
 
 st.altair_chart(
-    (empty_chart + line_chart + point_chart + soviet_chart + soviet_point + year_chart)
+    (su_chart + su_point + soviet_chart + soviet_point)
     .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
     .configure_title(anchor = "middle"),
     use_container_width = True
 )
 
-
-year = st.selectbox("Seleziona l'anno:", list(range(1992, 2025, 4)))
+years = list(range(1992, 2025, 4))
+year = st.selectbox("Seleziona l'anno:", years, index = years.index(2024))
 
 top_su = smedals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
 top_su = top_su.drop("Year")
 top_medal = medals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
-top_medal = top_medal.drop("Year")
+top_medal = top_medal.select(pl.col("Nation"), pl.col("Gold"), pl.col("Silver"), pl.col("Bronze"), pl.col("Total"))
 
 col_ranksu = pl.Series("Rank", list(range(1, len(top_su) + 1)))
 top_su = top_su.insert_column(0, col_ranksu)
