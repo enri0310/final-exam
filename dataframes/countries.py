@@ -43,16 +43,6 @@ def get_eucountry():
 
     return df.select(["Nation", "Year"])
 
-def get_yugoslavia():
-    yugoslavia = ["Slovenia", 
-                  "Croatia", 
-                  "Bosnia and Herzegovina", 
-                  "Serbia", 
-                  "Montenegro", 
-                  "North Macedonia", 
-                  "Kosovo"]
-    return yugoslavia
-
 def get_soviet():
     soviet = ["Soviet Union",
               "Russia", 

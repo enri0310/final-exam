@@ -20,6 +20,7 @@ cities = st.session_state.city
 cities = cities.with_columns(
     pl.col("Nation").alias("old_nation")
 )
+soviet = st.session_state.soviet
 #caso della germania est e ovest
 with st.sidebar:
     if st.toggle("Unisci Germania Est ed Ovest", value=False):
@@ -168,7 +169,7 @@ top_table = (
         subtitle = md(sub_title)
     )
     .tab_spanner(label = "Nazione", columns = ["Rank","Nation"])
-    .tab_spanner(label="Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
+    .tab_spanner(label = "Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
     .tab_style(
         style.fill("yellow"),
         loc.body(  
@@ -335,7 +336,7 @@ ts_data = (medals
 #creo serie temporale
 empty_chart = (
     alt.Chart(df_allyears)
-    .mark_line(opacity=0) 
+    .mark_line(opacity = 0) 
     .encode(alt.X("Year:O", title = "Anno"))
 )
 line_chart = (
@@ -346,7 +347,7 @@ line_chart = (
         alt.Y("Total:Q", title = "Totale medaglie"),
         alt.Color(
             "Nation:N", 
-            scale = alt.Scale(scheme = "viridis"), 
+            scale = alt.Scale(scheme = "category10"), 
             title = "Nazione"
         )
     )
@@ -426,7 +427,7 @@ point_chart = (alt.Chart(top_nations)
           .encode(
               alt.X("Ol_ed:Q", title = "Numero di edizioni olimpiche"),
               alt.Y("Total:Q", scale = alt.Scale(type = "log"), title = "Totale medaglie"),
-              alt.Color("Total:Q", title = "Totale medaglie").scale(scheme = "viridis"),
+              alt.Color("Total:Q", title = "Totale medaglie").scale(scheme = "category10"),
               tooltip=[
                   alt.Tooltip("Nation:N", title = "Nazione"),
                   alt.Tooltip("Total:Q", title = "Totale"),
@@ -642,14 +643,6 @@ st.altair_chart((pie_chart + big_text_chart)
                 use_container_width = True)
 
 
-hosting_cities = (
-    cities
-    .group_by("Nation")
-    .agg(pl.col("Year").count().alias("Edizioni Ospitate"))
-    .sort("Edizioni Ospitate", descending=True)
-)
-
-#st.dataframe(hosting_cities)
 
 st.markdown("""<h3> 🔍 Prestazioni olimpiche dei paesi ospitanti </h3>""", 
             unsafe_allow_html = True)
@@ -775,6 +768,210 @@ st.markdown(
     """,
     unsafe_allow_html = True
 )
+
+
+st.markdown("---")
+
+#SEZIONE PER CURIOSITA'
+st.markdown(
+    """
+    <div style="background-color: #f0f8ff; border-radius: 10px;">
+    <h2> Curiosità 👀 </h2>
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+smedals = medals.with_columns(
+    pl.when(pl.col("Nation").is_in(soviet)) 
+    .then(pl.lit("Soviet Union"))           
+    .otherwise(pl.col("Nation"))          
+    .alias("Nation")                       
+)
+smedals = (smedals
+           .group_by(["Nation", "Year"])
+           .agg([pl.col("Gold").sum().alias("Gold"),
+                 pl.col("Silver").sum().alias("Silver"),
+                 pl.col("Bronze").sum().alias("Bronze"),
+                 pl.col("Total").sum().alias("Total")]
+           )
+)
+
+soviet_medals = medals.filter(pl.col("Nation").is_in(soviet) & (pl.col("Nation") != "Soviet Union"))
+nations = soviet_medals.select("Nation").unique().sort("Nation").to_series().to_list()
+nations
+soviet_medals = (soviet_medals
+          .group_by(["Nation", "Year"])
+          .agg([pl.col("Gold").sum().alias("Gold"),
+                pl.col("Silver").sum().alias("Silver"),
+                pl.col("Bronze").sum().alias("Bronze"),
+                pl.col("Total").sum().alias("Total")]
+           )
+)
+
+su_medals = smedals.filter(pl.col("Nation") == "Soviet Union")
+
+line_chart = (
+    alt.Chart(su_medals)
+    .mark_line()
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.Y("Total:Q", title = "Totale medaglie"),
+        alt.Color(
+            "Nation:N", 
+            scale = alt.Scale(scheme = "category10"), 
+            title = "Nazione"
+        )
+    )
+)
+point_chart = (
+    alt.Chart(su_medals)
+    .mark_point(size = 50)
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.Y("Total:Q"),
+        alt.Color("Nation:N", title = "Nazione"),
+        tooltip = [
+            alt.Tooltip("Nation:N", title = "Nazione"),
+            alt.Tooltip("Year:O", title = "Anno"),
+            alt.Tooltip("Gold:Q", title = "Ori"),
+            alt.Tooltip("Silver:Q", title = "Argenti"),
+            alt.Tooltip("Bronze:Q", title = "Bronzi"),
+            alt.Tooltip("Total:Q", title = "Totale")
+        ]
+    )
+)
+soviet_chart = (
+    alt.Chart(soviet_medals)
+    .mark_line()
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.Y("Total:Q", title = "Totale medaglie"),
+        alt.Color(
+            "Nation:N", 
+            scale = alt.Scale(scheme = "category10"), 
+            title = "Nazione"
+        )
+    )
+)
+soviet_point = (
+    alt.Chart(soviet_medals)
+    .mark_point(size = 50)
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = years)),
+        alt.Y("Total:Q"),
+        alt.Color("Nation:N", title = "Nazione"),
+        tooltip = [
+            alt.Tooltip("Nation:N", title = "Nazione"),
+            alt.Tooltip("Year:O", title = "Anno"),
+            alt.Tooltip("Gold:Q", title = "Ori"),
+            alt.Tooltip("Silver:Q", title = "Argenti"),
+            alt.Tooltip("Bronze:Q", title = "Bronzi"),
+            alt.Tooltip("Total:Q", title = "Totale")
+        ]
+    )
+)
+
+
+st.altair_chart(
+    (empty_chart + line_chart + point_chart + soviet_chart + soviet_point + year_chart)
+    .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
+    .configure_title(anchor = "middle"),
+    use_container_width = True
+)
+
+
+year = st.selectbox("Seleziona l'anno:", list(range(1992, 2025, 4)))
+
+top_su = smedals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
+top_su = top_su.drop("Year")
+top_medal = medals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
+top_medal = top_medal.drop("Year")
+
+col_ranksu = pl.Series("Rank", list(range(1, len(top_su) + 1)))
+top_su = top_su.insert_column(0, col_ranksu)
+col_rank = pl.Series("Rank", list(range(1, len(top_medal) + 1)))
+top_medal = top_medal.insert_column(0, col_rank)
+
+top_tablesu = (
+    GT(data = top_su.head(10))
+    .tab_header(
+        title = md(f"Medagliere olimpico nell'anno {year}"),
+    )
+    .tab_spanner(label = "Nazione", columns = ["Rank","Nation"])
+    .tab_spanner(label = "Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
+    .tab_style(
+        style.fill("yellow"),
+        loc.body(  
+            columns = cs.all(),
+            rows = pl.col("Nation") == "Italy"
+        )
+    )
+    .tab_style(
+        style.fill("lightblue"),
+        loc.body(  
+            columns = cs.all(),
+            rows = pl.col("Nation") == "Soviet Union"
+        )
+    )
+    .tab_style(
+        style.text(align = "center"),
+        loc.spanner_labels(["Medaglie"])
+    )
+    .tab_style(
+        style.text(weight = "bold"),
+        loc.column_labels(criteria[0])
+    )
+    .tab_style(
+        style.text(align = "center"),
+        loc.source_notes()
+    )
+    .tab_source_note(source_note = md("Fonte: [**Wikipedia**](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table) - Olympic Medal Counts by Country."))
+    .as_raw_html()
+)
+top_table = (
+    GT(data = top_medal.head(10))
+    .tab_header(
+        title = md(f"Medagliere olimpico nell'anno {year}"),
+    )
+    .tab_spanner(label = "Nazione", columns = ["Rank","Nation"])
+    .tab_spanner(label = "Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
+    .tab_style(
+        style.fill("yellow"),
+        loc.body(  
+            columns = cs.all(),
+            rows = pl.col("Nation") == "Italy"
+        )
+    )
+    .tab_style(
+        style.fill("lightblue"),
+        loc.body(  
+            columns = cs.all(),
+            rows = pl.col("Nation") == "Russia"
+        )
+    )
+    .tab_style(
+        style.text(align = "center"),
+        loc.spanner_labels(["Medaglie"])
+    )
+    .tab_style(
+        style.text(weight = "bold"),
+        loc.column_labels(criteria[0])
+    )
+    .tab_style(
+        style.text(align = "center"),
+        loc.source_notes()
+    )
+    .tab_source_note(source_note = md("Fonte: [**Wikipedia**](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table) - Olympic Medal Counts by Country."))
+    .as_raw_html()
+)
+
+with st.expander("Vero medagliere"):
+    st.html(top_table)
+
+with st.expander("Medagliere con l'Unione Sovietica"):
+    st.html(top_tablesu)
+
 
 #footer
 st.markdown(

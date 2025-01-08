@@ -12,7 +12,6 @@ def load_datasets():
     st.session_state.city = cities()
     st.session_state.europe = countries.europe()
     st.session_state.soviet = countries.get_soviet()
-    st.session_state.yugoslavia = countries.get_yugoslavia()
     st.session_state.italy2024 = italy()
 
 def setup_page(title, icon, layout = "centered", css_file = "style/style.css"):
