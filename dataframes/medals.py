@@ -64,13 +64,14 @@ def get_medals():
     "Australasia" : "Australia",
     "Bohemia" : "Czechoslovakia",
     "Formosa": "Chinese Taipei",
+    "Russian Empire": "Russia",
     "ROC": "Russia",
     "British West Indies": "Jamaica",
     "United Team of Germany": "Germany",
     "Ceylon" : "Sri Lanka",
     "Macedonia": "North Macedonia",
     "FR Yugoslavia" : "Serbia and Montenegro",
-    "Unified Team" : "Soviet Union" 
+    "Unified Team" : "Soviet Union"
     }
 
     for year in years:
