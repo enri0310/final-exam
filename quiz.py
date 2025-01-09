@@ -2,9 +2,9 @@ import streamlit as st
 import utils as utl
 
 utl.setup_page(
-    title="Quiz App",
-    icon="🏆",
-    layout="centered"
+    title = "Quiz App",
+    icon = "🏆",
+    layout = "centered"
 )
 
 #domande quiz
@@ -13,33 +13,64 @@ quiz_data = [
         "question": "In quale anno si sono svolte le prime Olimpiadi moderne?",
         "options": ["1896", "1900", "1924", "1936"],
         "answer": "1896",
-        "information": "Le prime Olimpiadi moderne si sono svolte ad Atene, in Grecia, nel 1896."
+        "information": "Le prime Olimpiadi moderne si sono svolte ad Atene nel 1896."
     },
     {
-        "question": "Quale città è stata la prima a ospitare le Olimpiadi invernali?",
-        "options": ["Chamonix", "Stoccolma", "Lake Placid", "Oslo"],
-        "answer": "Chamonix",
-        "information": "Le prime Olimpiadi invernali si sono tenute a Chamonix, in Francia, nel 1924."
+        "question": "Quale continente ha ospitato il maggior numero di edizioni olimpiche?",
+        "options": ["America del Nord", "Europa", "Asia", "Africa"],
+        "answer": "Europa",
+        "information": "Con ben 17 edizioni delle Olimpiadi, l'Europa è il continente che ha ospitato più giochi olimpici."
     },
     {
         "question": "Qual è lo sport con più medaglie assegnate alle Olimpiadi estive?",
-        "options": ["Atletica", "Nuoto", "Ginnastica artistica", "Ciclismo"],
+        "options": ["Atletica", "Ginnastica artistica", "Nuoto", "Ciclismo"],
         "answer": "Nuoto",
         "information": "Il nuoto è lo sport con il maggior numero di medaglie assegnate, grazie alla varietà di eventi e distanze."
     },
     {
-        "question": "Chi ha vinto il maggior numero di medaglie olimpiche nella storia?",
-        "options": ["Michael Phelps", "Larisa Latynina", "Usain Bolt", "Mark Spitz"],
-        "answer": "Michael Phelps",
-        "information": "Michael Phelps, nuotatore statunitense, ha vinto 28 medaglie olimpiche, di cui 23 d'oro."
+        "question": "Quante sono le regioni italiane che hanno ricevuto almeno una medaglia a Parigi 2024?",
+        "options": ["20", "MILLE", "16", "15"],
+        "answer": "16",
+        "information": "Solamente 4 regioni italiane non hanno ottenuto medaglie alle ultime Olimpiadi: Valle d'Aosta, Abruzzo, Molise e Calabria."
     },
     {
-        "question": "Qual è il simbolo più riconoscibile delle Olimpiadi?",
-        "options": ["I cinque cerchi", "La torcia olimpica", "La medaglia d'oro", "La bandiera olimpica"],
-        "answer": "I cinque cerchi",
-        "information": "I cinque cerchi rappresentano l'unione dei continenti e lo spirito di competizione globale."
+        "question": "In quali anni non si sono svolte le Olimpiadi?",
+        "options": ["1900, 1908 e 2020", "1916, 1940 e 1980", "1940, 1944 e 1948", "1916, 1940 e 1944"],
+        "answer": "1916, 1940 e 1944",
+        "information": "Le Olimpiadi non si sono svolte nel 1916, 1940 e 1944 a causa delle guerre mondiali."
+    },
+    {
+        "question": "Quale paese ha vinto il maggior numero di medaglie alle Olimpiadi di Tokyo 2020?",
+        "options": ["Stati Uniti", "Cina", "Giappone", "Gran Bretagna"],
+        "answer": "Stati Uniti",
+        "information": "Gli Stati Uniti hanno vinto 113 medaglie a Tokyo 2020, il numero più alto tra tutte le nazioni."
+    },
+        {
+        "question": "Qual è stato il primo paese africano a ospitare le Olimpiadi estive?",
+        "options": ["Sudafrica", "Marocco", "Egitto", "Nessuno"],
+        "answer": "Nessuno",
+        "information": "Le Olimpiadi estive non sono mai state ospitate da un paese africano fino a oggi."
+    },
+    {
+        "question": "Quanti cerchi ci sono nel simbolo olimpico?",
+        "options": ["4", "5", "6", "1000"],
+        "answer": "5",
+        "information": "Il simbolo olimpico è composto da cinque cerchi, che rappresentano i cinque continenti."
+    },
+    {
+        "question": "Qual è l’unica nazione ad aver partecipato a tutte le edizioni delle Olimpiadi estive?",
+        "options": ["Stati Uniti", "Gran Bretagna", "Australia", "Francia"],
+        "answer": "Australia",
+        "information": "L'Australia è l'unico paese ad aver partecipato a tutte le edizioni delle Olimpiadi estive dal 1896."
+    },
+    {
+        "question": "Quale città ospiterà le Olimpiadi estive del 2028?",
+        "options": ["Parigi", "Los Angeles", "Brisbane", "Roma"],
+        "answer": "Los Angeles",
+        "information": "Los Angeles ospiterà le Olimpiadi estive del 2028, dopo aver già ospitato quelle del 1932 e del 1984."
     }
 ]
+
 
 #inizializzazioni sessioni della pagina
 if "index" not in st.session_state:
@@ -85,7 +116,7 @@ st.markdown(
         <li>Clicca su "Conferma risposta" per verificarla: <b>fai attenzione, perché non si può tornare indietro</b>.</li>
         <li>Avanza alla prossima domanda o riprova se desideri migliorarti.</li>
     </ul>
-    Non tutte le domande saranno prettamente inerenti all'analisi appena svolta, quindi buona fortuna! 🏆
+    Non tutte le domande saranno prettamente inerenti all'analisi appena svolta, quindi buona fortuna!
     </div>
     """,
     unsafe_allow_html = True
@@ -122,7 +153,7 @@ if st.session_state.answer:
     st.markdown(
         f"""
         <div class = "description">
-        <br>Commento:</br> {current_question["information"]}
+        <b>Commento:</b> {current_question["information"]}
         </div>
         """,
         unsafe_allow_html = True

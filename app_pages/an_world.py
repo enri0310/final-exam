@@ -89,9 +89,8 @@ cities = cities.filter(pl.col("Year").is_in(years))
 cities = cities.select(pl.col("City"), 
                        pl.col("Nation"), 
                        pl.col("Year"), 
-                       pl.col("Region"), 
-                       pl.col("Opening ceremony"), 
-                       pl.col("Closing ceremony"))
+                       pl.col("Region")
+)
 
 
 st.markdown(
