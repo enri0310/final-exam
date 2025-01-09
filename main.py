@@ -15,7 +15,12 @@ if __name__ == "__main__":
         ],
         "Quiz": [
             st.Page("quiz.py", title = "Quiz sulle Olimpiadi", icon = "❓")
-        ]
+        ],
+        "Informazioni utili": [
+            st.Page("information/info_data.py", title = "Dataset", icon = "📝"),
+            st.Page("information/info_map.py", title = "Mappe", icon = "🗺️"), 
+            st.Page("information/info_biblio.py", title = "Generali", icon = "📖"),      
+        ],
     }
 
     st.session_state.pg = st.navigation(pages)
