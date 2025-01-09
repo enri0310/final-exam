@@ -27,10 +27,12 @@ st.markdown(
     La bibliografia per il progetto include le seguenti fonti:
     <ul>
         <li><b>Dispense dei corsi:</b> SISTEMI DI ELABORAZIONE 2, SISTEMI DI ELABORAZIONE 1, STRUTTURE DATI E PROGRAMMAZIONE e SERIE STORICHE</li>
-        <li><a href = "https://www.geeksforgeeks.org/">GeeksforGeeks</a></li>
-        <li><a href = "https://www.w3schools.com/">W3Schools</a></li>
+        <li><a href = "https://www.geeksforgeeks.org/">GeeksforGeeks</a> in particolare per le librerie RegEx, Statsmodels e Numpy</li>
+        <li><a href = "https://www.w3schools.com/">W3Schools</a> per la parte di HTML e CSS</li>
         <li><b>Siti ufficiali delle librerie utilizzate</b></li>
-        <li><a href = "https://medium.com/@fesomade.alli/building-a-quiz-app-in-python-using-streamlit-d7c1aab4d690">Creazione di un quiz</a></li>
+        <li><a href="https://streamlit.io/gallery">Streamlit Gallery</a> per prendere ispirazione su font, colori e design da utilizzare.</li>
+        <li><a href = "https://medium.com/@fesomade.alli/building-a-quiz-app-in-python-using-streamlit-d7c1aab4d690">Articolo</a> per la creazione del quiz</li>
+        
     </ul>
     </p>
     """,
@@ -48,24 +50,24 @@ st.markdown(
 
 
 st.markdown("""<h3> 📦 Librerie utilizzate </h3>""", 
-            unsafe_allow_html=True)
+            unsafe_allow_html = True)
 st.markdown(
     """
     <p>
     Le principali librerie utilizzate per questo progetto sono:
     </p>
     <ul>
-        <li><a href = "https://streamlit.io/">streamlit</a></li>
-        <li><a href = "https://pola.rs/">polars</a></li>
-        <li><a href = "https://altair-viz.github.io/">altair</a></li>
-        <li><a href = "https://pandas.pydata.org/">pandas</a></li>
-        <li><a href = "https://geopandas.org/en/stable/">geopandas</a></li>
-        <li><a href = "https://numpy.org/doc/">numpy</a></li>
+        <li><a href = "https://streamlit.io/">Streamlit</a></li>
+        <li><a href = "https://pola.rs/">Polars</a></li>
+        <li><a href = "https://altair-viz.github.io/">Altair</a></li>
+        <li><a href = "https://pandas.pydata.org/">Pandas</a></li>
+        <li><a href = "https://geopandas.org/en/stable/">Geopandas</a></li>
+        <li><a href = "https://numpy.org/doc/">Numpy</a></li>
         <li><a href = "https://posit-dev.github.io/great-tables/articles/intro.html">great_tables</a></li>
-        <li><a href = "https://www.statsmodels.org/stable/api.html">statsmodels.api</a></li>
-        <li><a href = "https://docs.python.org/3/library/re.html">re</a></li>
-        <li><a href = "https://docs.python.org/3/library/os.html">os</a></li>
-        <li><a href = "https://pypi.org/project/requests/">requests</a></li>
+        <li><a href = "https://www.statsmodels.org/stable/api.html">Statsmodels</a></li>
+        <li><a href = "https://docs.python.org/3/library/re.html">RegEx</a></li>
+        <li><a href = "https://docs.python.org/3/library/os.html">OS</a></li>
+        <li><a href = "https://pypi.org/project/requests/">Requests</a></li>
     </ul>
     """,
     unsafe_allow_html = True
@@ -74,7 +76,6 @@ st.markdown(
 
 st.markdown("""<h3> 🔧 Utility </h3>""", 
             unsafe_allow_html = True)
-
 st.markdown(
     """
     <p>
