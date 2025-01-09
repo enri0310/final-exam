@@ -57,6 +57,7 @@ st.markdown(
     <ul>
         <li><a href = "https://streamlit.io/">streamlit</a></li>
         <li><a href = "https://pola.rs/">polars</a></li>
+        <li><a href = "https://altair-viz.github.io/">altair</a></li>
         <li><a href = "https://pandas.pydata.org/">pandas</a></li>
         <li><a href = "https://geopandas.org/en/stable/">geopandas</a></li>
         <li><a href = "https://numpy.org/doc/">numpy</a></li>
@@ -65,7 +66,6 @@ st.markdown(
         <li><a href = "https://docs.python.org/3/library/re.html">re</a></li>
         <li><a href = "https://docs.python.org/3/library/os.html">os</a></li>
         <li><a href = "https://pypi.org/project/requests/">requests</a></li>
-        <li><a href = "https://pillow.readthedocs.io/en/stable/">Pillow (PIL)</a></li>
     </ul>
     """,
     unsafe_allow_html = True
