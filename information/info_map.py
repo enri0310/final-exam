@@ -56,7 +56,7 @@ st.markdown(
     """
     <p>
     Per creare una mappa dettagliata dell'Italia, è stato utilizzato il dataset disponibile nel seguente repository GitHub:
-    <a href = "https://github.com/gnekt/geolocalizzazione-comuni-italiani" target="_blank">geolocalizzazione dei comuni</a>.
+    <a href = "https://github.com/gnekt/geolocalizzazione-comuni-italiani">geolocalizzazione dei comuni</a>.
     Questo dataset include informazioni sui comuni italiani come coordinate geografiche e dettagli amministrativi
     utili per rappresentare la distribuzione geografica a livello locale e provinciale. Quindi con l'aiuto della libreria <b>geopandas</b>, 
     i dati del repository sono stati caricati e manipolati per generare una visualizzazione specifica per il territorio italiano.

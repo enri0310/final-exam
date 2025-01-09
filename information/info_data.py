@@ -81,7 +81,7 @@ st.markdown(
     """
     <p>
     Questo dataset è stato creato a partire dalle informazioni contenute nell'articolo di
-    <a href = "https://www.eurosport.it/olimpiadi/olimpiadi-parigi-2024/2024/giochi-olimpici-italia-da-quali-regioni-arrivano-le-40-medaglie_sto20028615/story.shtml" target="_blank">Eurosport</a>. 
+    <a href = "https://www.eurosport.it/olimpiadi/olimpiadi-parigi-2024/2024/giochi-olimpici-italia-da-quali-regioni-arrivano-le-40-medaglie_sto20028615/story.shtml">Eurosport</a>. 
     L'articolo descrive la provenienza degli atleti italiani che hanno vinto almeno una medaglia durante le Olimpiadi di Parigi 2024 specificando per 
     ciascuno il tipo di medaglia conquistata e ulteriori dettagli sulla città di appartenenza. Per consentire l'estrazione dei dati, l'articolo è stato
     salvato in un file chiamato 'italy2024.txt'. Grazie alla sua struttura organizzata per regione, è stato possibile ricavare il dataset
