@@ -50,8 +50,8 @@ medals = (medals
               )
 )
 
+#titolo
 st.title("Analisi delle medaglie olimpiche nel Mondo 🌍")
-
 #commento introduttivo
 st.markdown(
     """
@@ -64,19 +64,16 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-#dataframe per gli anni delle olimpiadi
+#dataframe per gli anni delle Olimpiadi
 years = medals.select("Year").unique().sort("Year").to_series().to_list()
 df_years = pl.DataFrame({"Year": years})
 noyears = [year for year in list(range(1896, 2025, 4))  if year not in years]
 df_noyears = pl.DataFrame({"Year": noyears})
 df_allyears = pl.concat([df_years, df_noyears]).sort("Year")
-
 #lista delle nazioni
 nations = medals.select("Nation").unique().sort("Nation").to_series().to_list()
-
 #aggiunta colonna % medaglie d'oro
 medals = medals.with_columns((pl.col("Gold") / pl.col("Total") * 100).alias("Gold%"))
-
 #df aggregato per nazione
 top_nations = (medals
               .group_by("Nation")
@@ -86,7 +83,6 @@ top_nations = (medals
                     pl.col("Total").sum().alias("Total")]
               )
 )
-
 #tidy del df delle città
 cities = cities.filter(~pl.col("Summer").is_null())
 cities = cities.filter(pl.col("Year").is_in(years))
@@ -96,23 +92,6 @@ cities = cities.select(pl.col("City"),
                        pl.col("Region"), 
                        pl.col("Opening ceremony"), 
                        pl.col("Closing ceremony"))
-#creazione nuove colonne con le date di apertura e chiusura dei giochi
-cities = cities.with_columns(
-    pl.col("Opening ceremony")
-    .str.strptime(pl.Date, "%d %B %Y", strict = False)
-    .alias("Opening date"),
-    
-    pl.col("Closing ceremony")
-    .str.strptime(pl.Date, "%d %B %Y", strict = False)
-    .alias("Closing date")   
-)
-#nuova colonna: durata in giorni dei giochi
-cities = cities.with_columns(
-    ((pl.col("Closing date") - pl.col("Opening date"))
-     .cast(pl.Int64)/ (1000 * 60 * 60 * 24) + 1)
-     .cast(pl.Int64)
-     .alias("Days")
-)
 
 
 st.markdown(
@@ -128,13 +107,14 @@ st.markdown(
 st.markdown(
     """
     <div style = "background-color: #f0f8ff; border-radius: 10px;">
-    <h2> Analisi per Nazione </h2>
+    <h2> Analisi per nazione </h2>
     </div>
     """,
     unsafe_allow_html = True
 )
 
-st.markdown("""<h3> 📊 Top 10 Nazioni per totale di medaglie </h3>""",
+#medagliere totale
+st.markdown("""<h3> 📊 Top 10 nazioni nella storia </h3>""",
             unsafe_allow_html = True)
 
 #ordino in base alla modalità scelta
@@ -153,11 +133,11 @@ elif option == "Bronzo":
     criteria = ["Bronze", "Gold", "Silver", "Total"]
     sub_title = "Top **10** nazioni ordinate per n° di **bronzi** vinti"
 top_nations = top_nations.sort(by = criteria, descending = [True] * 4)
-
 #metto colonna rank all'inizio del df
 col_rank = pl.Series("Rank", list(range(1, len(top_nations) + 1)))
 top_nations = top_nations.insert_column(0, col_rank)
 
+#descrizione
 st.markdown(
     """
     <div class = "description">
@@ -167,7 +147,6 @@ st.markdown(
     """,
     unsafe_allow_html = True
 )
-
 
 #creo tabella great table
 top_table = (
@@ -214,23 +193,19 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
 #creo grafici a torta delle top 10 nazioni
 pie_data = (top_nations
             .head(10)
             .with_columns(
-                (pl.col("Gold") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Gold_f"),
-                (pl.col("Silver") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Silver_f"),
-                (pl.col("Bronze") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Bronze_f")
+                (pl.col("Gold") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Gold"),
+                (pl.col("Silver") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Silver"),
+                (pl.col("Bronze") / pl.col("Total") * 100).round(decimals = 2).cast(pl.Float64).alias("Bronze")
             )
             .unpivot(
                 index = "Nation",
-                on = ["Gold_f", "Silver_f", "Bronze_f"],
+                on = ["Gold", "Silver", "Bronze"],
                 value_name = "Frac",
                 variable_name = "Type"
-            )
-            .with_columns(
-                pl.col("Type").str.replace("_f", "", literal = False),
             )
             .with_columns(
                 pl.col("Frac").cast(pl.Float64)
@@ -252,7 +227,7 @@ base_data = (top_nations
              .with_columns(
                  pl.col("Count").cast(pl.Int64)
              )
-)   
+)  
 pie_data = (pie_data
             .join(base_data,
                   on = ["Nation", "Type"],
@@ -263,7 +238,6 @@ pie_data = (pie_data
                   how = "left"
             )
 )
-
 base_pie = alt.Chart(pie_data)
 pie_chart = (base_pie
              .mark_arc(radius = 45, radius2 = 65, cornerRadius = 10)
@@ -307,8 +281,8 @@ st.altair_chart((pie_chart + text_chart + big_text_chart)
 )
 
 
-
-st.markdown("""<h3> ⏳ Serie temporale delle medaglie </h3>""",
+#serie storica
+st.markdown("""<h3> ⏳ Serie storica delle medaglie </h3>""",
             unsafe_allow_html = True)
 selected_nations = st.multiselect(
     "Seleziona uno o più stati",
@@ -341,7 +315,7 @@ ts_data = (medals
                pl.col("Total").sum().alias("Total")
            ])
 )
-#creo serie temporale
+#creo serie storica
 empty_chart = (
     alt.Chart(df_allyears)
     .mark_line(opacity = 0) 
@@ -386,16 +360,15 @@ year_line = (
 
 st.altair_chart(
     (empty_chart + line_chart + point_chart + year_line)
-    .properties(title = f"Serie Temporale delle Medaglie - {', '.join(selected_nations)}")
+    .properties(title = f"Serie storica delle medaglie - {', '.join(selected_nations)}")
     .configure_title(anchor = "middle"),
     use_container_width = True
 )
 
 
-
+#relazione medaglie-edizioni
 st.markdown("""<h3> 📈 Relazione tra medaglie ed edizioni </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -500,7 +473,8 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-st.markdown("""<h3> 📊 Top 10 Nazioni per totale di medaglie per edizione </h3>""",
+#top 10 per anno
+st.markdown("""<h3> 📊 Top 10 nazioni per totale di medaglie per edizione </h3>""",
             unsafe_allow_html = True)
 
 year = st.selectbox("Seleziona l'anno:", years)
@@ -540,16 +514,17 @@ chart = (
             alt.Tooltip("Bronze:Q", title = "Bronzi"),
             alt.Tooltip("Total:Q", title = "Totale")
         ])
+    .properties(title = f"Top 10 nazioni nell'anno {year}")
+    .configure_title(anchor = "middle")
 )
 
 st.altair_chart(chart, 
                 use_container_width = True)
 
 
-
+#medaglie totali edzione
 st.markdown("""<h3> 📈 Evoluzione delle medaglie assegnate </h3>""", 
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -603,15 +578,14 @@ point_chart = (
 )
 
 st.altair_chart((line_chart + point_chart + year_line)
-                .properties(title="Evoluzione delle Medaglie Totali Assegnate")
+                .properties(title = "Evoluzione delle medaglie totali assegnate")
                 .configure_title(anchor = "middle"), 
                 use_container_width = True)
 
 
-
-st.markdown("""<h3> 🍰 Distribuzione delle edinizioni olimpiche per continente </h3>""", 
+#grafico a torta continenti
+st.markdown("""<h3> 🍰 Distribuzione delle edizioni olimpiche per continente </h3>""", 
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -662,7 +636,6 @@ st.altair_chart((pie_chart + big_text_chart)
 
 st.markdown("""<h3> 🔍 Prestazioni olimpiche dei paesi ospitanti </h3>""", 
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -824,6 +797,7 @@ st.markdown(
 )
 
 
+#serie storica paesi sovietici
 st.markdown("""<h3> 💥 Serie storica dei paesi sovietici </h3>""", 
             unsafe_allow_html = True)
 #descrizione
@@ -838,6 +812,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
+#medaglie se l'URSS esistesse ancora
 smedals = medals.with_columns(
     pl.when(pl.col("Nation").is_in(soviet)) 
     .then(pl.lit("Soviet Union"))           
@@ -852,8 +827,9 @@ smedals = (smedals
                  pl.col("Total").sum().alias("Total")]
            )
 )
+#lista dal 1952 (primo anno in cui partecipò l'URSS) fino ad oggi
 su_year = list(range(1952, 2025, 4))
-
+#medaglie ex paesi sovietici
 soviet_medals = medals.filter(pl.col("Nation").is_in(soviet) & (pl.col("Nation") != "Soviet Union") & pl.col("Year").is_in(su_year))
 soviet_medals = (soviet_medals
           .group_by(["Nation", "Year"])
@@ -863,9 +839,10 @@ soviet_medals = (soviet_medals
                 pl.col("Total").sum().alias("Total")]
            )
 )
-
+#medaglie URSS 'attuale'
 su_medals = smedals.filter((pl.col("Nation") == "Soviet Union") & pl.col("Year").is_in(su_year))
 
+#creo serie storica
 su_chart = (
     alt.Chart(su_medals)
     .mark_line()
@@ -926,7 +903,7 @@ soviet_point = (
         ]
     )
 )
-
+#anno prima Olimpade con URSS separata
 year_line = (
     alt.Chart(pl.DataFrame({"Year": 1992}))
     .mark_rule(strokeWidth = 1, color = "red") 
@@ -938,7 +915,7 @@ year_line = (
 
 st.altair_chart(
     (su_chart + su_point + soviet_chart + soviet_point + year_line)
-    .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
+    .properties(title = f"Serie storica delle medaglie dell'URSS ed ex paesi sovietici")
     .configure_title(anchor = "middle"),
     use_container_width = True
 )
@@ -974,9 +951,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
-
-
+#medaglie competitors dell'URSS
 competitors = ["China", "United States", "Great Britain"]
 comp_medals = medals.filter(pl.col("Nation").is_in(competitors) & pl.col("Year").is_in(su_year))
 comp_medals = (comp_medals
@@ -987,6 +962,8 @@ comp_medals = (comp_medals
                 pl.col("Total").sum().alias("Total")]
            )
 )
+
+#creo serie storica
 comp_chart = (
     alt.Chart(comp_medals)
     .mark_line()
@@ -1020,7 +997,7 @@ comp_point = (
 
 st.altair_chart(
     (su_chart + su_point + comp_chart + comp_point + year_line)
-    .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
+    .properties(title = f"Serie storica delle medaglie totali dell'URSS, Cina, USA e Gran Bretagna")
     .configure_title(anchor = "middle"),
     use_container_width = True
 )
@@ -1056,16 +1033,19 @@ st.markdown(
     unsafe_allow_html = True
 )
 
+#medagliere con URSS
 top_su = smedals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
 top_su = top_su.drop("Year")
+#medagliere senza URSS
 top_medal = medals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
 top_medal = top_medal.select(pl.col("Nation"), pl.col("Gold"), pl.col("Silver"), pl.col("Bronze"), pl.col("Total"))
-
+#aggiungo colonna Rank
 col_ranksu = pl.Series("Rank", list(range(1, len(top_su) + 1)))
 top_su = top_su.insert_column(0, col_ranksu)
 col_rank = pl.Series("Rank", list(range(1, len(top_medal) + 1)))
 top_medal = top_medal.insert_column(0, col_rank)
 
+#creo tabella great table
 top_tablesu = (
     GT(data = top_su.head(10))
     .tab_header(
@@ -1101,6 +1081,7 @@ top_tablesu = (
     )
     .as_raw_html()
 )
+#creo tabella great table
 top_table = (
     GT(data = top_medal.head(10))
     .tab_header(
