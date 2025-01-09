@@ -56,7 +56,17 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-st.markdown("""<h3> 🌍 Distribuzione geografica delle Nazioni dell'Unione Europea </h3>""",
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
+
+
+st.markdown("""<h3> 🌍 Distribuzione geografica delle nazioni dell'UE </h3>""",
             unsafe_allow_html = True)
 
 #descrizione
@@ -108,7 +118,7 @@ utl.open_map(chart, "eu_year")
 
 
 
-st.markdown("""<h3> 🥇 Performance olimpiche totali delle Nazioni </h3>""",
+st.markdown("""<h3> 🥇 Performance olimpiche totali delle nazioni </h3>""",
             unsafe_allow_html = True)
 
 #descrizione
@@ -159,7 +169,7 @@ st.altair_chart(chart,
 
 
 
-st.markdown("""<h3> ⚖️ Confronto tra le Nazioni e tipoligia di medaglie </h3>""",
+st.markdown("""<h3> ⚖️ Confronto tra le nazioni e tipoligia di medaglie </h3>""",
             unsafe_allow_html = True)
 
 #lista nazioni
@@ -354,6 +364,15 @@ st.markdown(
     parte di queste nazioni che non hanno raggiunto gli stessi livelli di performance degli altri paesi europei.
     </div>
     """,
+    unsafe_allow_html = True
+)
+
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
     unsafe_allow_html = True
 )
 

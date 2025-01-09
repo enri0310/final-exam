@@ -19,11 +19,11 @@ st.markdown(
     "<h1> Gloria e medaglie: scopri le prestazioni olimpiche delle nazioni </h1>",
     unsafe_allow_html = True
 )
+
 st.markdown(
     "<h3> Un viaggio attraverso i successi delle nazioni nelle Olimpiadi estive, dal passato glorioso al presente </h3>",
     unsafe_allow_html = True
 )
-
 st.markdown(
     """
     <p>
@@ -34,7 +34,15 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-st.markdown("---")
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
+
 
 st.markdown("""<h3> 📚 Definizione di 'Olimpiade' </h3>""",
             unsafe_allow_html = True)
@@ -58,7 +66,6 @@ st.markdown("""
     """, 
     unsafe_allow_html = True)
 
-st.markdown("---")
 
 st.markdown("""<h3> 🌍 Esplora i medaglieri </h3>""",
             unsafe_allow_html = True)
@@ -87,7 +94,6 @@ with col3:
     if st.button("Vai a medaglie in Italia"):
         st.switch_page("app_pages/an_italy.py")
 
-st.markdown("---")
 
 st.markdown("""<h3>💬 Esplora, scopri, condividi</h3>""", 
             unsafe_allow_html = True)
@@ -99,8 +105,6 @@ st.markdown(
     </p>
     """,
     unsafe_allow_html = True)
-
-st.markdown("---")
 
 
 st.markdown("""<h3>📌 Fonti</h3>""",
@@ -133,6 +137,15 @@ with col2:
     if st.button("ℹ️ Ulteriori informazioni"):
         st.switch_page("information/info_data.py")
 
+
+st.markdown(
+    """
+    <br>
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
 
 #footer
 st.markdown(

@@ -114,12 +114,20 @@ cities = cities.with_columns(
      .alias("Days")
 )
 
-st.markdown("---")
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
+
 
 #SEZIONE PER NAZIONE
 st.markdown(
     """
-    <div style="background-color: #f0f8ff; border-radius: 10px;">
+    <div style = "background-color: #f0f8ff; border-radius: 10px;">
     <h2> Analisi per Nazione </h2>
     </div>
     """,
@@ -197,7 +205,7 @@ st.html(top_table)
 #descrizione
 st.markdown(
     """
-    <div class="description">
+    <div class = "description">
     Questi grafici a torta visualizzano la distribuzione percentuale delle medaglie d'oro, d'argento e di bronzo per le prime 10 nazioni nel ranking 
     olimpico. Ogni segmento dell'arco rappresenta la percentuale di ciascun tipo di medaglia, mentre il totale delle medaglie è visibile al centro di 
     ogni grafico, mentre i totali per ogni tipo di medaglia son riportati si lato ad ogni segmento
@@ -472,7 +480,15 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-st.markdown("---")
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
+
 
 #SEZIONE PER EDIZIONE
 st.markdown(
@@ -770,12 +786,19 @@ st.markdown(
 )
 
 
-st.markdown("---")
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
+
 
 #SEZIONE PER CURIOSITA'
 st.markdown(
     """
-    <div style="background-color: #f0f8ff; border-radius: 10px;">
+    <div style = "background-color: #f0f8ff; border-radius: 10px;">
     <h2> Curiosità 👀 </h2>
     </div>
     """,
@@ -970,6 +993,15 @@ with st.expander("Vero medagliere"):
 
 with st.expander("Medagliere con l'Unione Sovietica"):
     st.html(top_tablesu)
+
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
 
 
 #footer

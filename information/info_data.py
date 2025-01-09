@@ -11,7 +11,7 @@ st.title("Informazioni utili sui dataset utilizzati 🚀")
 
 st.markdown(
     """
-    <hr style="margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
     <br>
     """, 
     unsafe_allow_html = True
@@ -96,7 +96,7 @@ st.markdown(
 
 st.markdown(
     """
-    <hr style="margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
     <br>
     """, 
     unsafe_allow_html = True
@@ -274,6 +274,14 @@ st.markdown(
     unsafe_allow_html = True
 )
 
+
+st.markdown(
+    """
+    <hr style = "margin-top: 0; margin-bottom: 0; height: 2px; border: none; background-color: #1f77b4;">
+    <br>
+    """, 
+    unsafe_allow_html = True
+)
 
 
 #footer
