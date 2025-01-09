@@ -378,14 +378,14 @@ point_chart = (
     )
 )
 #aggiungo anni in cui non sono avvenute le olimpiadi
-year_chart = (
+year_line = (
     alt.Chart(df_noyears)
     .mark_rect(opacity = 0.4, color = "red") 
     .encode(alt.X("Year:O"))
 )
 
 st.altair_chart(
-    (empty_chart + line_chart + point_chart + year_chart)
+    (empty_chart + line_chart + point_chart + year_line)
     .properties(title = f"Serie Temporale delle Medaglie - {', '.join(selected_nations)}")
     .configure_title(anchor = "middle"),
     use_container_width = True
@@ -602,7 +602,7 @@ point_chart = (
     )
 )
 
-st.altair_chart((line_chart + point_chart + year_chart)
+st.altair_chart((line_chart + point_chart + year_line)
                 .properties(title="Evoluzione delle Medaglie Totali Assegnate")
                 .configure_title(anchor = "middle"), 
                 use_container_width = True)
@@ -804,6 +804,39 @@ st.markdown(
     """,
     unsafe_allow_html = True
 )
+#descrizione
+st.markdown(
+    """
+    <p>
+    <br>
+    Ti manca l'Unione Sovietica? Non temere, non sei l'unico! In questa sezione, ti offriamo una riflessione su come sarebbe stato il medagliere 
+    olimpico se l'URSS fosse ancora in pista. Immagina un mondo dove invece di vedere 
+    la Russia lottare da sola per il podio avremmo visto un'armata di atleti provenienti da tutte le repubbliche 
+    sovietiche uniti per una gloria olimpica sotto la bandiera rossa. Curioso di scoprire cosa sarebbe cambiato? 
+    Continua a leggere... e preparati a qualche sorpresa.
+    <br>
+    Bisogna ricordare che dopo il crollo dell'URSS nel 1991, gli atleti delle ex repubbliche sovietiche, ad eccezione di Estonia, Lettonia e Lituania, 
+    gareggiarono insieme come Squadra Unificata alle Olimpiadi del 1992 (che per semplicità nel dataset utilizzato è stato unito al medagliere dell'Unione Sovietica)
+    e da quelle successive tutti i paesi gareggiarono con comitati olimpici nazionali
+    </p>
+    """,
+    unsafe_allow_html = True
+)
+
+
+st.markdown("""<h3> 💥 Serie storica dei paesi sovietici </h3>""", 
+            unsafe_allow_html = True)
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Il grafico mostra l'andamento temporale delle medaglie vinte dall'Unione Sovietica (realmente fino al 1992 e ipoteticamente dalle Olimpiadi 
+    successive) e dagli stati che ne facevano parte. La linea rossa rappresenta un punto di svolta: segna la prima Olimpiade in cui i paesi sovietici 
+    iniziarono a partecipare con comitati olimpici nazionali separati.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 smedals = medals.with_columns(
     pl.when(pl.col("Nation").is_in(soviet)) 
@@ -894,16 +927,134 @@ soviet_point = (
     )
 )
 
+year_line = (
+    alt.Chart(pl.DataFrame({"Year": 1992}))
+    .mark_rule(strokeWidth = 1, color = "red") 
+    .encode(
+        alt.X("Year:O"),
+    )
+)
+
 
 st.altair_chart(
-    (su_chart + su_point + soviet_chart + soviet_point)
+    (su_chart + su_point + soviet_chart + soviet_point + year_line)
     .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
     .configure_title(anchor = "middle"),
     use_container_width = True
 )
 
+#commento
+st.markdown(
+    """
+    <div class = "description">
+    Si può notare come l'Unione Sovietica abbia dominato la scena olimpica per gran parte della sua storia fino quasi ad arrivare alle 200 medaglie vinte
+    a Mosca 1980  e come il suo scioglimento abbia portato alla distribuzione delle medaglie tra le nazioni che l'hanno sostituita. 
+    A partire dal 1992, a parte per la Russia, si osserva un "schiacciamento" delle medaglie tra i vari paesi il che fa riflettere su quanto sarebbe 
+    stato performante l'URSS se avesse continuato a competere sotto un'unica bandiera e sul ruolo fondamentale che ha avuto la Russia come nazione
+
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+
+
+st.markdown("""<h3> ⚔️ Paesi competitors a confronto: serie storica </h3>""", 
+            unsafe_allow_html = True)
+st.markdown(
+    """
+    <div class = "description">
+    Questa serie storica mette a confronto le medaglie totali vinte dall'Unione Sovietica con quelle conquistate dalla Cina, dagli Stati Uniti e 
+    dalla Gran Bretagna, ovvero i paesi che nel corso della storia si sono sempre dimostrati i più performanti. La linea rossa verticale indica 
+    la prima Olimpiade in cui i paesi sovietici si sono presentati separati con comitati olimpici nazionali. 
+    Da quel punto in poi, il grafico continua in modo ipotetico, unendo i medaglieri di tutti i paesi sovietici come se l'URSS fosse rimasta un'entità 
+    unica, ancora presente oggi.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+
+
+
+competitors = ["China", "United States", "Great Britain"]
+comp_medals = medals.filter(pl.col("Nation").is_in(competitors) & pl.col("Year").is_in(su_year))
+comp_medals = (comp_medals
+          .group_by(["Nation", "Year"])
+          .agg([pl.col("Gold").sum().alias("Gold"),
+                pl.col("Silver").sum().alias("Silver"),
+                pl.col("Bronze").sum().alias("Bronze"),
+                pl.col("Total").sum().alias("Total")]
+           )
+)
+comp_chart = (
+    alt.Chart(comp_medals)
+    .mark_line()
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
+        alt.Y("Total:Q", title = "Totale medaglie"),
+        alt.Color(
+            "Nation:N", 
+            scale = alt.Scale(scheme = "category10"), 
+            title = "Nazione"
+        )
+    )
+)
+comp_point = (
+    alt.Chart(comp_medals)
+    .mark_point(size = 50)
+    .encode(
+        alt.X("Year:O", title = "Anno", axis = alt.Axis(values = su_year)),
+        alt.Y("Total:Q"),
+        alt.Color("Nation:N", title = "Nazione"),
+        tooltip = [
+            alt.Tooltip("Nation:N", title = "Nazione"),
+            alt.Tooltip("Year:O", title = "Anno"),
+            alt.Tooltip("Gold:Q", title = "Ori"),
+            alt.Tooltip("Silver:Q", title = "Argenti"),
+            alt.Tooltip("Bronze:Q", title = "Bronzi"),
+            alt.Tooltip("Total:Q", title = "Totale")
+        ]
+    )
+)
+
+st.altair_chart(
+    (su_chart + su_point + comp_chart + comp_point + year_line)
+    .properties(title = f"Serie temporale delle Medaglie dell'Unione Sovietica")
+    .configure_title(anchor = "middle"),
+    use_container_width = True
+)
+
+#commento
+st.markdown(
+    """
+    <div class = "description">
+    Rispetto ai suoi competitors, l'Unione Sovietica continuerebbe a primeggiare superando di gran lunga gli altri paesi per totale di medaglie vinte.
+    L'unico calo significativo si osserva nel 2024 dovuto al fatto che Bielorussia e in particolare la Russia non hanno potuto partecipare ai giochi 
+    di Parigi 2024 a causa dello scoppio della guerra in Ucraina.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
+
+st.markdown("""<h3> 🏅 Medaglieri olimpici a confronto </h3>""", 
+            unsafe_allow_html = True)
+
 years = list(range(1992, 2025, 4))
 year = st.selectbox("Seleziona l'anno:", years, index = years.index(2024))
+
+#descrizione
+st.markdown(
+    """
+    <div class = "description">
+    Le due tabelle mostrano i medaglieri olimpici per un anno selezionato. La prima tabella presenta il medagliere effettivo considerando solo le 
+    nazioni contemporanee, mentre la seconda tabella unifica le medaglie delle nazioni che hanno fatto parte dell'Unione Sovietica sotto un'unica 
+    voce. Questo permette di analizzare quale sarebbe stato l'impatto dell'URSS nei giochi olimpici negli anni successivi al suo crollo.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 top_su = smedals.filter(pl.col("Year") == year).sort(by = ["Total", "Gold", "Silver", "Bronze"], descending = [True] * 4)
 top_su = top_su.drop("Year")
@@ -918,7 +1069,7 @@ top_medal = top_medal.insert_column(0, col_rank)
 top_tablesu = (
     GT(data = top_su.head(10))
     .tab_header(
-        title = md(f"Medagliere olimpico nell'anno {year}"),
+        title = md(f"Medagliere olimpico nell'anno {year} con l'Unione Sovietica"),
     )
     .tab_spanner(label = "Nazione", columns = ["Rank","Nation"])
     .tab_spanner(label = "Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
@@ -948,13 +1099,12 @@ top_tablesu = (
         style.text(align = "center"),
         loc.source_notes()
     )
-    .tab_source_note(source_note = md("Fonte: [**Wikipedia**](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table) - Olympic Medal Counts by Country."))
     .as_raw_html()
 )
 top_table = (
     GT(data = top_medal.head(10))
     .tab_header(
-        title = md(f"Medagliere olimpico nell'anno {year}"),
+        title = md(f"Vero medagliere olimpico nell'anno {year}"),
     )
     .tab_spanner(label = "Nazione", columns = ["Rank","Nation"])
     .tab_spanner(label = "Medaglie", columns = ["Gold", "Silver", "Bronze", "Total"])
@@ -984,7 +1134,6 @@ top_table = (
         style.text(align = "center"),
         loc.source_notes()
     )
-    .tab_source_note(source_note = md("Fonte: [**Wikipedia**](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table) - Olympic Medal Counts by Country."))
     .as_raw_html()
 )
 
@@ -993,6 +1142,19 @@ with st.expander("Vero medagliere"):
 
 with st.expander("Medagliere con l'Unione Sovietica"):
     st.html(top_tablesu)
+
+#commento
+st.markdown(
+    """
+    <div class = "description">
+    Se l'Unione Sovietica fosse ancora un'entità esistente, avrebbe continuato a primeggiare nel medagliere olimpico mantenendo il 
+    suo dominio dal 1992 fino al 2020. Bisogna però ribadire che, sebbene questa ipotesi ci faccia riflettere sulle sue potenzialità, 
+    è interessante osservare come il suo scioglimento abbia aperto nuove dinamiche dando spazio a un mondo olimpico più diversificato e imprevedibile 
+    che forse non avrebbe avuto lo stesso corso sotto un'unica bandiera.
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 
 st.markdown(
