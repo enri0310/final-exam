@@ -350,6 +350,7 @@ point_chart = (
         ]
     )
 )
+
 #aggiungo anni in cui non sono avvenute le olimpiadi
 year_line = (
     alt.Chart(df_noyears)

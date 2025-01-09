@@ -18,8 +18,8 @@ df_allyears = pl.DataFrame({"Year": list(range(1896, 2025, 4))})
 #lista delle regioni
 regioni = italy2024.select("Region").unique().sort("Region").to_series().to_list()
 
+#titolo
 st.title("Analisi delle Medaglie Olimpiche in Italia 🍕")
-
 #commento introduttivo
 st.markdown(
     """
@@ -43,10 +43,9 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
+#italia alle Olimpiadi
 st.markdown("""<h3> 🏅 Evoluzione delle medaglie olimpiche nel tempo </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -113,10 +112,9 @@ st.markdown(
 )
 
 
-
+#grafico regioni medagliate
 st.markdown("""<h3> 🌍 Distribuzione delle medaglie 2024 per regione </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -130,6 +128,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
+#dati regionali
 region2024 = (
     italy2024
     .group_by("Region")
@@ -177,6 +176,8 @@ data_chart = (
     )
     .filter(pl.col("Count") > 0)
 )
+
+#creo grafico
 bar_chart = (alt.Chart(data_chart)
              .mark_bar()
              .encode(
@@ -227,11 +228,9 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
-
+#mappa delle medaglie
 st.markdown("""<h3> 🗺️ Distribuzione geografica delle medaglie 2024 </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -315,12 +314,14 @@ provincia = province.merge(
 )
 
 world = utl.get_geography()
+#mappa italia
 chartit = (
     alt.Chart(world[world["NAME"] == "Italy"])
     .mark_geoshape()
     .encode(color = alt.value("lightgrey"))
     .properties(width = 600, height = 600)
 )
+#mappa province
 chartpr = (
     alt.Chart(provincia)
     .mark_circle(size = 20)
@@ -328,6 +329,7 @@ chartpr = (
     .encode(color = alt.Color("Total:N", scale = alt.Scale(scheme = "category10")))
     .properties(width = 600, height = 600)
 )
+#mappa finale
 chart = ((chartit + chartpr)
          .properties(width = 600, height = 600)
          .project(
@@ -368,7 +370,7 @@ region = province.merge(
     left_on = "region",
     right_on = "Region"
 )
-
+#mappa regioni
 chartrg = (
     alt.Chart(region)
     .mark_circle(size = 20)
@@ -376,6 +378,7 @@ chartrg = (
     .encode(color = alt.Color("Total:N", scale = alt.Scale(scheme = "category10")))
     .properties(width = 600, height = 600)
 )
+#mappa finale
 chart = ((chartit + chartrg)
          .properties(width = 600, height = 600)
          .project(
@@ -397,7 +400,6 @@ with col2:
         label = "Regioni totali",
         value = 20
     )
-
 
 #commento
 st.markdown(

@@ -28,14 +28,15 @@ medals = (medals
               pl.col("Total").sum().alias("Total")
           ])
 )
+#medaglie europa
 eu_medals = (
     medals
     .join(europe.rename({"Year": "eu_Year"}), on = "Nation", how = "left") 
     .filter(pl.col("Year") >= pl.col("eu_Year"))  
 )
 
+#titolo
 st.title("Analisi delle medaglie olimpiche in Unione Europea 🤝")
-
 #commento introduttivo
 st.markdown(
     """
@@ -65,10 +66,9 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
+#mappa paesi ue
 st.markdown("""<h3> 🌍 Distribuzione geografica delle nazioni dell'UE </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -116,11 +116,9 @@ chart = ((chartwrl + charteu )
 
 utl.open_map(chart, "eu_year")
 
-
-
+#europa alle Olimpiadi
 st.markdown("""<h3> 🥇 Performance olimpiche totali delle nazioni </h3>""",
             unsafe_allow_html = True)
-
 #descrizione
 st.markdown(
     """
@@ -167,8 +165,7 @@ chart = (
 st.altair_chart(chart, 
                 use_container_width = True)
 
-
-
+#nazioni - medaglie
 st.markdown("""<h3> ⚖️ Confronto tra le nazioni e tipoligia di medaglie </h3>""",
             unsafe_allow_html = True)
 
@@ -193,7 +190,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-#greo grafico
+#creo grafico
 chart_data = (medals
            .filter(pl.col("Nation").is_in(selected_nations))
            .group_by(["Nation"])
@@ -240,8 +237,7 @@ chart = (alt.Chart(chart_data)
 st.altair_chart(chart, 
                 use_container_width = True)
 
-
-
+#heatmap
 st.markdown("""<h3> 📊 Totale delle medaglie nel tempo </h3>""",
             unsafe_allow_html = True)
 
@@ -271,7 +267,7 @@ chart = (
             alt.Tooltip("Total:Q", title = "Totale medaglie")
         ]
     )
-    .properties(title ="Totale medaglie per anno e nazione")
+    .properties(title = "Totale medaglie per anno e nazione")
     .configure_title(anchor = "middle")
 )
 
@@ -291,8 +287,7 @@ st.markdown(
     unsafe_allow_html = True
 )
 
-
-
+#mappa delle medaglie
 st.markdown("""<h3> 🗺️ Mappa geografica delle medaglie olimpiche </h3>""",
             unsafe_allow_html = True)
 
@@ -344,6 +339,7 @@ charteu = (
         )
     )
 )
+#mappa finale
 chart = ((chartwrl + charteu )
          .properties(width = 600, height = 600)
          .project(
