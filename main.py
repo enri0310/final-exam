@@ -1,13 +1,13 @@
 import streamlit as st
 import utils as utl
 
-# Caricamento iniziale
-if __name__ == "__main__":
+
+def main():
     utl.load_datasets()
 
-    # Pagine del menu
+    #pagine del menù
     pages = {
-        "Home": [st.Page("home.py", title="Home", icon="🏠")],
+        "Home": [st.Page("home.py", title = "Home", icon = "🏠")],
         "Analisi": [
             st.Page("app_pages/an_world.py", title = "Analisi nel Mondo", icon = "📊"),
             st.Page("app_pages/an_eu.py", title = "Analisi in Unione Europea", icon = "📊"),
@@ -23,5 +23,10 @@ if __name__ == "__main__":
         ],
     }
 
+    #barra di navigazione
     st.session_state.pg = st.navigation(pages)
     st.session_state.pg.run()
+
+
+if __name__ == "__main__":
+    main()
