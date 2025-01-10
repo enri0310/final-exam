@@ -19,7 +19,7 @@ df_allyears = pl.DataFrame({"Year": list(range(1896, 2025, 4))})
 regioni = italy2024.select("Region").unique().sort("Region").to_series().to_list()
 
 #titolo
-st.title("Analisi delle Medaglie Olimpiche in Italia 🍕")
+st.title("Analisi delle medaglie olimpiche in Italia 🍕")
 #commento introduttivo
 st.markdown(
     """
