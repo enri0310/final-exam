@@ -25,7 +25,7 @@ git clone https://github.com/enri0310/final-exam.git
 cd final-exam
 ```
 
-#### **3. Esegui il programma:**
+#### **3. Esegui il programma**
 
 ```bash
 uv run streamlit run main.py
