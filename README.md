@@ -34,4 +34,4 @@ uv run streamlit run main.py
 
 ## **Progetto**
 
-Tutte le informazioni riguardanti il progetto, come dataset, mappe, fonti e bibliografia, sono consultabili nella sezione **"Informazioni"** all'interno dell'applicazione web.
+Tutte le informazioni riguardanti il progetto, come dataset, mappe, fonti e bibliografia sono consultabili nella sezione **"Informazioni"** all'interno dell'applicazione web.
