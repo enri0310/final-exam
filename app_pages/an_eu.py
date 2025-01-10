@@ -42,15 +42,15 @@ st.markdown(
     """
     <p>
     In questa pagina è possibile esplorare le performance delle nazioni dell'Unione Europea ai giochi olimpici. Attraverso grafici interattivi e mappe, 
-    vengono analizzati le medaglie conquistate dai paesi membri, il loro contributo storico e l'evoluzione delle prestazioni nel tempo, sia prima che 
-    dopo il loro ingresso nell'UE.
+    vengono analizzati le medaglie conquistate dai paesi membri, il loro contributo storico e l'evoluzione delle prestazioni nel tempo dopo il loro 
+    ingresso nell'UE.
     <br>
-    Per ragioni computazionali, le medaglie della Germania Est e della Germania Ovest sono state unite e considerate come un'unica nazione. Inoltre si 
-    è scelto di utilizzare il 1958 come data di ingresso nell'UE per la Germania, anche se all'epoca il paese era diviso e solo la Germania Ovest 
-    faceva parte della Comunità Europea.
+    Per ragioni computazionali le medaglie della Germania Est e della Germania Ovest sono state unite e considerate come un'unica nazione. Inoltre si 
+    è scelto di utilizzare il 1958 come data di ingresso nell'UE per la Germania anche se all'epoca il paese era diviso e solo la Germania Ovest 
+    faceva parte dell'UE.
     <br>
     Per correttezza è giusto sottolineare che il dataset analizzato prende in considerazione le medaglie vinte dalle nazioni a partire dalla prima 
-    edizione delle Olimpiadi in cui tali nazioni sono entrate nell'Unione Europea. Per esempio, per la Spagna vengono considerate le medaglie vinte 
+    edizione delle Olimpiadi in cui tali nazioni sono entrate nell'Unione Europea. Per esempio per la Spagna vengono considerate le medaglie vinte 
     alle Olimpiadi di Seoul 1988 e in tutte le edizioni successive visto che la Spagna è entrata nell'UE nel 1986.
     </p>
     """,
@@ -73,7 +73,7 @@ st.markdown("""<h3> 🌍 Distribuzione geografica delle nazioni dell'UE </h3>"""
 st.markdown(
     """
     <div class = "description">
-    Questa mappa rappresenta evidenzia i paesi aderenti all'Unione Europea e il colore indica l'anno in cui la nazione 
+    Questa mappa evidenzia i paesi aderenti all'Unione Europea e il colore indica l'anno in cui la nazione 
     è entrata nell'UE. In blu si possono notare i sei paesi fondatori: Germania, Francia, Italia, Paesi Bassi, Belgio e Lussemburgo.
     </div>
     """,
@@ -280,7 +280,7 @@ st.markdown(
     <div class = "description">
     Dalla heatmap emerge chiaramente che nazioni come Francia, Germania e Italia hanno un ruolo centrale nel medagliere totale dell'Unione Europea,
     infatti i loro colori sono molto intensi rappresendando così il loro costante successo olimpico nel corso degli anni. 
-    Anche i Paesi Bassi pur partendo da una posizione meno prominente hanno mostrato un crescente impatto soprattutto nelle edizioni recenti,
+    Anche i Paesi Bassi pur partendo da una posizione meno prominente hanno mostrato un crescente impatto soprattutto nelle edizioni recenti
     dimostrando una crescente influenza sul totale delle medaglie.
     </div>
     """,
@@ -295,8 +295,9 @@ st.markdown("""<h3> 🗺️ Mappa geografica delle medaglie olimpiche </h3>""",
 st.markdown(
     """
     <div class = "description">
-    La mappa rappresenta il totale delle medaglie olimpiche vinte da ciascuna nazione europea. Il colore indica diverse categorie di medaglie 
-    con sfumature più scure che rappresentano performance più elevate. Utile per comprendere la distribuzione geografica delle performance.
+    La mappa rappresenta il totale delle medaglie olimpiche vinte da ciascuna nazione europea. Il colore indica il numero totale di medaglie vinte da
+    ciascuna nazione: le sfumature più scure che rappresentano performance più elevate. Utile per comprendere a livello visivo la distribuzione 
+    geografica delle medaglie.
     </div>
     """,
     unsafe_allow_html = True
@@ -357,7 +358,9 @@ st.markdown(
     La mappa evidenzia chiaramente il ruolo centrale di nazioni come Francia, Italia e Germania nel medagliere totale dell'Unione Europea.
     Questi paesi si distinguono per il loro costante successo olimpico nel corso degli anni. Al contrario è evidente come i paesi dell'Est Europa 
     abbiano avuto un impatto marginale sul totale delle medaglie. Questo suggerisce una partecipazione meno significativa da 
-    parte di queste nazioni che non hanno raggiunto gli stessi livelli di performance degli altri paesi europei.
+    parte di queste nazioni che non hanno raggiunto gli stessi livelli di performance degli altri paesi europei. Inoltre ci fa capire che se
+    l'UE gareggiasse come entità unica alle Olimpiadi la somma delle medaglie di Francia, Italia e Germania rappresenterebbe 
+    un blocco significativo per il successo olimpico.
     </div>
     """,
     unsafe_allow_html = True

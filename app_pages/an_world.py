@@ -56,8 +56,9 @@ st.title("Analisi delle medaglie olimpiche nel Mondo 🌍")
 st.markdown(
     """
     <p>
-    In questa pagina è pissibile esplorare le performance delle nazioni in ogni edizione dei giochi olimpici. Sono presenti due sezioni principali: una 
-    dedicata alle prestazioni complessive delle nazioni e l'altra focalizzata sulle edizioni specifiche. 
+    In questa pagina è pissibile esplorare le performance delle nazioni in ogni edizione dei giochi olimpici. Sono presenti tre sezioni principali: la
+    prima dedicata alle prestazioni complessive delle nazioni, la seconda focalizzata sulle edizioni specifiche, mentre l'ultima riguarda alcune
+    curiosita sull'Unione Sovietica. 
     Grazie alla flessibilità del pannello laterale, è possibile anche combinare i risultati di Germania Est e Ovest per un'analisi più completa. 
     </p>
     """,
@@ -434,8 +435,8 @@ st.markdown(
     """
     <div class = "description-top">
     Dopo aver analizzato la distribuzione delle medaglie, si evince che esiste un forte effetto di tipo esponenziale tra il numero di edizioni olimpiche 
-    e il numero di medaglie. Questo significa che con l'aumento delle edizioni olimpiche si osserva un incremento esponenziale del totale delle medaglie.
-    Il modello di regressione mostra una chiara relazione esponenziale, confermata dai dati. 
+    e il numero di medaglie. Questo significa che con l'aumento delle edizioni olimpiche si osserva un incremento del totale delle medaglie.
+    Il modello di regressione mostra una chiara relazione esponenziale confermata dai dati. 
     Di seguito è mostrato il modello esponenziale che rappresenta questa relazione:
     </div>
     """,
@@ -593,7 +594,7 @@ st.markdown(
     Il grafico mostra la distribuzione delle Olimpiadi per continente. Ogni arco della torta corrisponde a un continente e la sua grandezza è 
     proporzionale al numero di edizioni olimpiche ospitate da ciascun continente. Dal grafico si può osservare una netta predominanza di alcuni 
     continenti in termini di edizioni olimpiche ospitate con un focus particolare sull'Europa e l'America del Nord che insieme hanno ospitato i tre
-    quarti delle Olimpiadi nel corso della storia.
+    quarti delle Olimpiadi nel corso della storia. Si può anche notare che l'Africa non ha mai ospitato fino ad ora un'Olimpiade
     </div>
     """,
     unsafe_allow_html = True
@@ -782,7 +783,7 @@ st.markdown(
     """
     <p>
     <br>
-    Ti manca l'Unione Sovietica? Non temere, non sei l'unico! In questa sezione, ti offriamo una riflessione su come sarebbe stato il medagliere 
+    Ti manca l'Unione Sovietica? Non temere, non sei l'unico! In questa sezione ti offriamo una riflessione su come sarebbe stato il medagliere 
     olimpico se l'URSS fosse ancora in pista. Immagina un mondo dove invece di vedere 
     la Russia lottare da sola per il podio avremmo visto un'armata di atleti provenienti da tutte le repubbliche 
     sovietiche uniti per una gloria olimpica sotto la bandiera rossa. Curioso di scoprire cosa sarebbe cambiato? 
@@ -790,7 +791,7 @@ st.markdown(
     <br>
     Bisogna ricordare che dopo il crollo dell'URSS nel 1991, gli atleti delle ex repubbliche sovietiche, ad eccezione di Estonia, Lettonia e Lituania, 
     gareggiarono insieme come Squadra Unificata alle Olimpiadi del 1992 (che per semplicità nel dataset utilizzato è stato unito al medagliere dell'Unione Sovietica)
-    e da quelle successive tutti i paesi gareggiarono con comitati olimpici nazionali
+    e da quelle successive tutti i paesi gareggiarono con comitati olimpici nazionali.
     </p>
     """,
     unsafe_allow_html = True
@@ -926,8 +927,8 @@ st.markdown(
     <div class = "description">
     Si può notare come l'Unione Sovietica abbia dominato la scena olimpica per gran parte della sua storia fino quasi ad arrivare alle 200 medaglie vinte
     a Mosca 1980  e come il suo scioglimento abbia portato alla distribuzione delle medaglie tra le nazioni che l'hanno sostituita. 
-    A partire dal 1992, a parte per la Russia, si osserva un "schiacciamento" delle medaglie tra i vari paesi il che fa riflettere su quanto sarebbe 
-    stato performante l'URSS se avesse continuato a competere sotto un'unica bandiera e sul ruolo fondamentale che ha avuto la Russia come nazione
+    A partire dal 1992 a parte per la Russia, si osserva un "schiacciamento" delle medaglie tra i vari paesi il che fa riflettere su quanto sarebbe 
+    stato performante l'URSS se avesse continuato a competere sotto un'unica bandiera e sul ruolo fondamentale che ha avuto la Russia come nazione.
 
     </div>
     """,
@@ -944,8 +945,8 @@ st.markdown(
     Questa serie storica mette a confronto le medaglie totali vinte dall'Unione Sovietica con quelle conquistate dalla Cina, dagli Stati Uniti e 
     dalla Gran Bretagna, ovvero i paesi che nel corso della storia si sono sempre dimostrati i più performanti. La linea rossa verticale indica 
     la prima Olimpiade in cui i paesi sovietici si sono presentati separati con comitati olimpici nazionali. 
-    Da quel punto in poi, il grafico continua in modo ipotetico, unendo i medaglieri di tutti i paesi sovietici come se l'URSS fosse rimasta un'entità 
-    unica, ancora presente oggi.
+    Da quel punto in poi il grafico continua in modo ipotetico unendo i medaglieri di tutti i paesi sovietici come se l'URSS fosse rimasta un'entità 
+    unica ancora presente oggi.
     </div>
     """,
     unsafe_allow_html = True

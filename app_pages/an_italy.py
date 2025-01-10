@@ -27,7 +27,7 @@ st.markdown(
     In questa pagina vengono analizzate le medaglie olimpiche ottenute dall'Italia nel corso della storia con un focus particolare sull'ultima edizione, 
     ovvero le Olimpiadi di Parigi 2024. È importante notare che nella sezione relativa alle medaglie vinte a Parigi il totale non corrisponde a 40, 
     bennsì a 87. Questo perché il dataset considera tutti gli atleti italiani medagliati individualmente. Ad esempio il bronzo vinto dalla staffetta 
-    4x100m stile libero maschile non viene conteggiato come una sola medaglia, ma come quattro, poiché vengono inclusi i quattro atleti medagliati: 
+    4x100m stile libero maschile non viene conteggiato come una sola medaglia, ma come quattro perché vengono inclusi i quattro atleti medagliati: 
     Thomas Ceccon, Alessandro Miressi, Paolo Conte Bonin e Manuel Frigo.
     </p>
     """,
@@ -51,7 +51,7 @@ st.markdown(
     """
     <div class = "description">
     Questo grafico mostra l'evoluzione delle medaglie olimpiche vinte dall'Italia nel corso delle edizioni olimpiche. Le medaglie sono suddivise per tipo
-    (oro, argento, bronzo) e visualizzate nel tempo, dal 1896 fino al 2024. Le aree colorate rappresentano la distribuzione di ciascun tipo di medaglia.
+    (oro, argento, bronzo) e visualizzate nel tempo, dal 1896 fino al 2024.
     </div>
     """,
     unsafe_allow_html = True
@@ -121,7 +121,7 @@ st.markdown(
     <div class = "description">
     Questo grafico visualizza la distribuzione delle medaglie olimpiche italiane nelle diverse regioni nell'edizione di Parigi 2024. 
     Ogni barra rappresenta una regione e mostra il numero totale di medaglie conquistate suddivise per tipo (oro, argento, bronzo).
-    L'ordinamento delle regioni è basato sull'importanza relativa del numero di medaglie ottenute da ciascuna regione, con le regioni più medagliate in 
+    L'ordinamento delle regioni è basato sull'importanza relativa del numero di medaglie ottenute da ciascuna regione con le regioni più medagliate in 
     cima alla lista.
     </div>
     """,
@@ -219,10 +219,10 @@ st.altair_chart(final_chart,
 st.markdown(
     """
     <div class = "description">
-    La Lombardia si conferma una delle regioni più performanti con 7 ori, 6 argenti e 2 bronzi, dominando il medagliere italiano. Nonostante ciò anche 
-    altre regioni hanno contribuito in modo significativo al successo olimpico. La Toscana con 4 ori e un totale di 12 medaglie e il Veneto con 2 ori e 
-    9 medaglie complessive sono altri esempi di territori che hanno lasciato un segno importante. In più è interessante notare come anche atleti italiani
-    nati all'estero abbiano contribuito al medagliere.
+    La Lombardia si conferma la regione più performante con 7 ori, 6 argenti e 2 bronzi dominando il medagliere italiano. Nonostante ciò anche 
+    altre regioni hanno contribuito in modo significativo al successo olimpico: la Toscana con 4 ori e un totale di 12 medaglie e il Veneto con 2 ori e 
+    9 medaglie complessive sono altri esempi di territori che hanno lasciato un segno importante. In più è interessante notare come anche gli atleti 
+    italiani nati all'estero abbiano contribuito al medagliere.
     </div>
     """,
     unsafe_allow_html = True
@@ -235,11 +235,12 @@ st.markdown("""<h3> 🗺️ Distribuzione geografica delle medaglie 2024 </h3>""
 st.markdown(
     """
     <div class = "description">
-    La prima mappa visualizza la distribuzione geografica delle medaglie ottenute dall'Italia a Parigi 2024, con l'eccezione delle 6 medaglie conquistate 
-    da atleti italiani nati all'estero. Le città italiane sono rappresentate da punti colorati dove il colore riflette il numero totale di medaglie 
+    La prima mappa visualizza la distribuzione geografica provinciale delle medaglie ottenute dall'Italia a Parigi 2024 con l'eccezione delle 6 
+    medaglie conquistate da atleti italiani nati all'estero. Le città italiane sono colorate in base al numero totale di medaglie 
     ottenute. Questo permette di individuare le città che hanno contribuito maggiormente ai successi olimpici.
     <br>
-    Nella seconda mappa le medaglie sono invece raggruppate per regione. Ogni regione è colorata in base al totale delle medaglie conquistate dai suoi atleti.
+    Nella seconda mappa le medaglie sono invece raggruppate per regione. Ogni regione è colorata in base al totale delle medaglie conquistate 
+    dai suoi atleti.
     </div>
     """,
     unsafe_allow_html = True
@@ -406,7 +407,7 @@ st.markdown(
     """
     <div class = "description">
     Le due mappe fornite mettono in evidenza una marcata concentrazione di medaglie nelle regioni del Centro e Nord Italia, mentre le regioni del Sud 
-    appaiono significativamente meno rappresentate. Questa disparità geografica suggerisce la possibilità di diversi fattori che potrebbero influenzare 
+    appaiono significativamente meno rappresentate. Questa disparità geografica suggerisce la possibilità che diversi fattori potrebbero influenzare 
     la performance sportiva regionale. Potrebbe trattarsi di differenze nell'accesso alle risorse, come strutture sportive e 
     finanziamenti regionali o di fattori socio-culturali che incidono sulla partecipazione e la formazione degli atleti.  Un'analisi più approfondita 
     potrebbe consentire di indagare come questi fattori siano correlati e di esplorare in che misura influenzano le differenze regionali nella conquista

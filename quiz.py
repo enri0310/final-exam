@@ -19,13 +19,13 @@ quiz_data = [
         "question": "Quale continente ha ospitato il maggior numero di edizioni olimpiche?",
         "options": ["America del Nord", "Europa", "Asia", "Africa"],
         "answer": "Europa",
-        "information": "Con ben 17 edizioni delle Olimpiadi, l'Europa è il continente che ha ospitato più giochi olimpici."
+        "information": "Con ben 17 edizioni delle Olimpiadi l'Europa è il continente che ha ospitato più giochi olimpici."
     },
     {
         "question": "Qual è lo sport con più medaglie assegnate alle Olimpiadi estive?",
         "options": ["Atletica", "Ginnastica artistica", "Nuoto", "Ciclismo"],
         "answer": "Nuoto",
-        "information": "Il nuoto è lo sport con il maggior numero di medaglie assegnate, grazie alla varietà di eventi e distanze."
+        "information": "Il nuoto è lo sport con il maggior numero di medaglie assegnate grazie alla varietà di eventi e distanze."
     },
     {
         "question": "Quante sono le regioni italiane che hanno ricevuto almeno una medaglia a Parigi 2024?",
@@ -55,7 +55,7 @@ quiz_data = [
         "question": "Quanti cerchi ci sono nel simbolo olimpico?",
         "options": ["4", "5", "6", "1000"],
         "answer": "5",
-        "information": "Il simbolo olimpico è composto da cinque cerchi, che rappresentano i cinque continenti."
+        "information": "Il simbolo olimpico è composto da cinque cerchi che rappresentano i cinque continenti."
     },
     {
         "question": "Qual è l’unica nazione ad aver partecipato a tutte le edizioni delle Olimpiadi estive?",
@@ -67,7 +67,7 @@ quiz_data = [
         "question": "Quale città ospiterà le Olimpiadi estive del 2028?",
         "options": ["Parigi", "Los Angeles", "Brisbane", "Roma"],
         "answer": "Los Angeles",
-        "information": "Los Angeles ospiterà le Olimpiadi estive del 2028, dopo aver già ospitato quelle del 1932 e del 1984."
+        "information": "Los Angeles ospiterà le Olimpiadi estive del 2028 dopo aver già ospitato quelle del 1932 e del 1984."
     }
 ]
 

@@ -28,7 +28,7 @@ st.markdown(
     </p>
 
     <ul>
-        <li><b>Dispense dei corsi:</b> SISTEMI DI ELABORAZIONE 2, SISTEMI DI ELABORAZIONE 1, STRUTTURE DATI E PROGRAMMAZIONE e SERIE STORICHE;</li>
+        <li><b>Dispense dei corsi:</b> SISTEMI DI ELABORAZIONE 2, SISTEMI DI ELABORAZIONE 1, STRUTTURE DATI E PROGRAMMAZIONE e MODELLI STATISTICI 2;</li>
         <li><a href = "https://www.geeksforgeeks.org/">GeeksforGeeks</a> in particolare per le librerie RegEx, Statsmodels e Numpy;</li>
         <li><a href = "https://www.w3schools.com/">W3Schools</a> per la parte di HTML e CSS;</li>
         <li><b>Siti ufficiali delle librerie utilizzate</b>;</li>
