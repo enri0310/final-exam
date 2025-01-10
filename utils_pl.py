@@ -3,12 +3,14 @@ import pandas as pd
 import requests
 import os
 
+#carica CSV
 def load_csv(file_path):
     if os.path.exists(file_path):
         #print(f"Caricando il file esistente: {file_path}")
         return pl.read_csv(file_path, null_values = ["NA", ""])
     return None
 
+#scarica tabelle
 def download_table(url):
     response = requests.get(url)
     if response.status_code != 200:
@@ -31,6 +33,7 @@ def read_tlines(file_path):
         print(f"Errore nella lettura del file {file_path}: {e}")
         return None
 
+#rinomina nazioni
 def rename_nations(df, renamed_dict):
     if "Nation" in df.columns:  
         return df.with_columns(
@@ -41,9 +44,11 @@ def rename_nations(df, renamed_dict):
     else:
         raise ValueError("La colonna 'Nation' non è presente nel DataFrame.")
 
+#elimina nazioni
 def filter_teams(df, exclude_teams):
     return df.filter(~pl.col("Nation").is_in(exclude_teams))
 
+#pulizia della colonna
 def clean_column(df, column_name):
     df = df.with_columns(pl.col(column_name)
         .str.replace(r"\s*\(.*\)", "", literal = False)  
@@ -55,6 +60,7 @@ def clean_column(df, column_name):
     )
     return df
 
+#cast della colonna
 def cast_column(df, column, dtype = pl.Int64, fill_value = 0):
      df = df.with_columns(pl.col(column).cast(dtype).fill_null(fill_value))
      return df
