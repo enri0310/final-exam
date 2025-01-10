@@ -20,7 +20,7 @@ st.markdown(
 #SEZIONE ORIGINE DATASET
 st.markdown(
     """
-    <div style="background-color: #f0f8ff; border-radius: 10px;">
+    <div style = "background-color: #f0f8ff; border-radius: 10px;">
     <h2> Origine dei dataset </h2>
     </div>
     <br>
@@ -34,10 +34,50 @@ st.markdown("""<h3> 🔍 Dataset delle medaglie olimpiche </h3>""",
 st.markdown(
     """
     <p>
-    Questo dataset è stato creato estraendo i dati relativi alle nazioni membri dell'Unione Europea da 
-    <a href = "https://en.wikipedia.org/wiki/Member_state_of_the_European_Union">Wikipedia</a>. 
-    Dopo aver rimosso le note e tutti i riferimenti aggiuntivi per rendere i dati tidy e aver uniformato i nomi delle nazioni per garantire coerenza 
-    con gli altri dataset utilizzati, si ottiene un dataset pulito e pronto per l'analisi dei dati europei.
+    Il dataset delle medaglie olimpiche è stato creato raccogliendo e organizzando i dati relativi ai medaglieri dei giochi olimpici partendo 
+    dalla prima edizione moderna del 1896 fino al 2024. Il processo è stato strutturato in quattro fasi principali:
+    </p>
+
+    <ol>
+    <li>
+    <b>Raccolta dei dati:</b>
+    i dati sono stati estratti sfruttando la funzione <code>download_table</code> del modulo <code>utils_pl.py</code>. Questa funzione
+    utilizza <code>pandas.read_html</code> per leggere direttamente le tabelle HTML presenti sulle pagine di 
+    <a href = "https://en.wikipedia.org/wiki/Category:Summer_Olympics_medal_tables">Wikipedia</a>. Una volta scaricate, le tabelle vengono 
+    convertite nel formato Polars tramite <code>polars.from_pandas</code>. Questo processo permette di sfruttare la flessibilità di 
+    Pandas per effettuare la conversione iniziale delle tabelle HTML e le prestazioni di Polars per le operazioni successive sui dati.
+    </li>
+
+    <li>
+    <b>Tidy dei dati:</b>
+        <ul>
+            <li><b>uniformato i nomi delle nazioni:</b> i nomi delle nazioni sono stati resi coerenti utilizzando un dizionario di mapping 
+            (vedi la sezione "Il problema delle nazioni"), permettendo così di eliminare variazioni o discrepanze nei nomi;</li>
+            <li><b>rimosso note e riferimenti:</b> attraverso la funzione <code>clean_column</code> sono stati eliminati elementi aggiuntivi 
+            come parentesi, asterischi e riferimenti, rendendo i dati più chiari e facilmente leggibili;</li>
+            <li><b>convertito colonne numeriche:</b> le colonne relative alle medaglie ("Gold", "Silver", "Bronze", "Total") sono state convertite 
+            in formato numerico con la sostituzione dei valori nulli con zero, per garantire coerenza e correttezza nelle analisi;</li>
+            <li><b>filtrato le squadre:</b> sono state rimosse le righe contenenti totali aggregati o comitati olimpici non appartenenti a una
+            nazione specifica (vedi sezione "Modifica nazione").</li>
+        </ul>
+    </li>
+
+    <li>
+    <b>Aggregazione dei dati:</b>
+    i medaglieri di tutte le edizioni olimpiche sono stati uniti in un unico dataset grazie alla funzione <code>concatenate_df</code>. 
+    Questa funzione utilizza <code>polars.concat</code>, garantendo una combinazione coerente e uniforme tra le diverse edizioni.
+    </li>
+
+    <li>
+    <b>Salvataggio in un file CSV:</b>
+    il dataset finale è stato esportato in formato CSV, garantendo così una facile accessibilità e rendendolo pronto per ulteriori 
+    analisi o visualizzazioni.
+    </li>
+    </ol>
+
+    <p>
+    In questo modo ogni riga rappresenta una nazione in uno specifico anno e ogni colonna rappresenta una variabile. Questo processo è stato utilizzato 
+    anche per gli altri dataset.
     </p>
     """, 
     unsafe_allow_html = True
@@ -50,28 +90,28 @@ st.markdown(
     """
     <p>
     Il dataset delle città ospitanti delle Olimpiadi è stato creato partendo dalla tabella presente su 
-    <a href = "https://en.wikipedia.org/wiki/List_of_Olympic_Games_host_cities">Wikipedia</a>. 
-    Sono state selezionate le colonne rilevanti per l'analisi e i dati sono stati ripuliti per eliminare eventuali ambiguità. 
-    Il risultato finale è un dataset che offre una panoramica chiara delle città e delle nazioni che hanno ospitato 
+    <a href = "https://en.wikipedia.org/wiki/List_of_Olympic_Games_host_cities">Wikipedia</a>.
+    Anche in questo caso i  dati sono stati estratti dalla tabella presente su Wikipedia e successivamente sono state selezionate 
+    le colonne rilevanti per l'analisi e i dati sono stati ripuliti per eliminare eventuali ambiguità tramite le funzioni descritte nel 
+    dataset precedente. Il risultato finale è un dataset che offre una panoramica chiara delle città e delle nazioni che hanno ospitato 
     le edizioni estive dei giochi olimpici.
     </p>
     """, 
     unsafe_allow_html = True
 )
 
-
 st.markdown("""<h3> 🌍 Dataset dei Paesi Europei </h3>""",
             unsafe_allow_html = True)
 st.markdown(
     """
     <p>
-    Questo dataset è stato creato estraendo i dati relativi alle nazioni membri dell'Unione Europea da 
-    <a href = "https://en.wikipedia.org/wiki/Member_state_of_the_European_Union">Wikipedia</a>. 
+    Il dataset dei paesi europei è stato creato estraendo i dati relativi alle nazioni membri dell'Unione Europea da 
+    <a href = "https://en.wikipedia.org/wiki/Member_state_of_the_European_Union">Wikipedia</a>.
     Dopo aver rimosso le note e tutti i riferimenti aggiuntivi per rendere i dati tidy e aver uniformato i nomi delle nazioni per garantire 
     coerenza con gli altri dataset utilizzati, si ottiene un dataset pulito e pronto per l'analisi dei dati europei.
     </p>
     """, 
-    unsafe_allow_html=True
+    unsafe_allow_html = True
 )
 
 
@@ -80,18 +120,73 @@ st.markdown("""<h3> 🏅 Dataset delle medaglie italiane a Parigi 2024 </h3>""",
 st.markdown(
     """
     <p>
-    Questo dataset è stato creato a partire dalle informazioni contenute nell'articolo di
+    Questo dataset è stato creato a partire dalle informazioni contenute nell'articolo di 
     <a href = "https://www.eurosport.it/olimpiadi/olimpiadi-parigi-2024/2024/giochi-olimpici-italia-da-quali-regioni-arrivano-le-40-medaglie_sto20028615/story.shtml">Eurosport</a>. 
     L'articolo descrive la provenienza degli atleti italiani che hanno vinto almeno una medaglia durante le Olimpiadi di Parigi 2024 specificando per 
-    ciascuno il tipo di medaglia conquistata e ulteriori dettagli sulla città di appartenenza. Per consentire l'estrazione dei dati, l'articolo è stato
-    salvato in un file chiamato 'italy2024.txt'. Grazie alla sua struttura organizzata per regione, è stato possibile ricavare il dataset
-    finale il quale include le seguenti informazioni: nome dell'atleta, città e regione di nascita, numero di medaglie d'oro, argento, bronzo e il 
-    totale delle medaglie conquistate.
+    ciascuno il tipo di medaglia conquistata e ulteriori dettagli sulla città di appartenenza. Il processo per la creazione di questo dataset si
+    differenzia dagli altri e prevede le seguenti fasi:
     </p>
+
+    <ol>
+    <li>
+    <b>Raccolta dei dati:</b>
+    l'articolo è stato salvato in un file di testo chiamato <code>italy2024.txt</code> che contiene i dati organizzati per regione e con 
+    informazioni sugli atleti e le loro medaglie.
+    </li>
+
+    <li>
+    <b>Estrazione e tidy dei dati:</b>
+        <ul>
+            <li><b>identificato le regioni:</b> ogni sezione del file è stata associata alla regione corrispondente utilizzando espressioni regolari;</li>
+            <li><b>estratto le medaglie:</b> per ogni atleta sono stati analizzati i dettagli delle medaglie (oro, argento, bronzo) e la città di 
+            appartenenza;</li>
+            <li><b>aggregato i risultati:</b> le informazioni sono state aggregate per atleta includendo il totale delle medaglie conquistate.</li>
+        </ul>
+    </li>
+
+    <li>
+    <b>Salvataggio in un file CSV:</b><br>
+    il dataset risultante è stato salvato in formato CSV con colonne che includono: nome dell'atleta, città, regione, medaglie d'oro, argento, bronzo e totale.
+    </li>
+    </ol>
     """, 
     unsafe_allow_html = True
 )
 
+
+st.markdown("""<h3> 📉 Analisi tramite grafici  </h3>""",
+            unsafe_allow_html = True)
+st.markdown(
+    """
+    <p>
+    I dataset utilizzati seguono il formato "tidy", un approccio strutturato per organizzare i dati il quale prevede che:
+    </p>
+
+    <ul>
+    <li>ogni riga rappresenta una singola osservazione, come per esempio un atleta o una nazione in un specifico; </li>
+    <li>ogni colonna rappresenta una variabile distinta, per esmepio totale di medaglie o l'anno;</li>
+    <li>ogni tabella rappresenta un set di dati ben definito.</li>
+    </ul>
+
+    <p>
+    Questo formato è particolarmente utile per analisi e manipolazioni, ma per creare i grafici richiesti è stato necessario riorganizzare i dati 
+    adattandoli a specifiche esigenze di visualizzazione. Questo processo ha comportato trasformazioni come:
+    </p>
+
+    <ul>
+    <li>la <strong>riorganizzazione</strong> dei dati attraverso l'utilizzo delle funzioni <code>pivot</code> e <code>unpivot</code> della libreria 
+    <strong>Polars</strong> per ristrutturare i dati in formato più adatto ai grafici.</li>
+    <li>l'<strong>unione</strong> di tabelle prvenienti da diverse fonti di dati mediante <code>join</code> (Polars) e <code>merge</code> 
+    (<strong>Pandas</strong> e <strong>Geopandas</strong>).</li>
+    </ul>
+
+    <p>
+    Grazie a questi strumenti i dati sono stati trasformati mantenendo intatta la loro coerenza e significatività per garantire che i grafici 
+    prodotti riflettano informazioni accurate e utili.
+    </p>
+    """, 
+    unsafe_allow_html = True
+)
 
 
 st.markdown(
@@ -222,17 +317,17 @@ st.markdown(
     Ai fini dell'analisi, sono state apportate alcune modifiche al dataset originale. In particolare, in accordo con quanto precedentemente spiegato, 
     le seguenti nazioni sono state aggiornate:
     <ul>
-        <li><strong>Australasia</strong> è stata unita con <strong>Australia</strong></li>
-        <li><strong>Bohemia</strong> è stata integrata in <strong>Cecoslovacchia</strong></li>
-        <li><strong>Formosa</strong> è stata sostituita con <strong>Chinese Taipei</strong></li>
-        <li><strong>ROC</strong> e <strong>Russian Empire</strong> son stati unificati con la <strong>Russia</strong></li>
-        <li><strong>Czechoslovakia</strong> è stata lasciata così
-        <li>Il nome di <strong>Ceylon</strong> è stato sostituito con <strong>Sri Lanka</strong></li>
-        <li><strong>British West Indies</strong> è stata rappresentata da <strong>Jamaica</strong></li>
-        <li><strong>FR Jugoslavia</strong> è stata unita con <strong>Serbia and Montenegro</strong></li>
-        <li><strong>United Team of Germany</strong> è stata sostituita con <strong>Germany</strong></li>
-        <li>Il nome della <strong>Macedonia</strong> è stato cambiato in <strong>North Macedonia</strong>, come riconosciuto a livello internazionale</li>
-        <li><strong>Unified Team</strong> è stata sostituita con <strong>Soviet Union</strong></li>
+        <li><strong>Australasia</strong> è stata unita con <strong>Australia</strong>;</li>
+        <li><strong>Bohemia</strong> è stata integrata in <strong>Cecoslovacchia</strong>;</li>
+        <li><strong>Formosa</strong> è stata sostituita con <strong>Chinese Taipei</strong>;</li>
+        <li><strong>ROC</strong> e <strong>Russian Empire</strong> son stati unificati con la <strong>Russia</strong>;</li>
+        <li><strong>Czechoslovakia</strong> è stata lasciata così;</li>
+        <li>il nome di <strong>Ceylon</strong> è stato sostituito con <strong>Sri Lanka</strong>;</li>
+        <li><strong>British West Indies</strong> è stata rappresentata da <strong>Jamaica</strong>;</li>
+        <li><strong>FR Jugoslavia</strong> è stata unita con <strong>Serbia and Montenegro</strong>;</li>
+        <li><strong>United Team of Germany</strong> è stata sostituita con <strong>Germany</strong>;</li>
+        <li>il nome della <strong>Macedonia</strong> è stato cambiato in <strong>North Macedonia</strong>, come riconosciuto a livello internazionale;</li>
+        <li><strong>Unified Team</strong> è stata sostituita con <strong>Soviet Union</strong>.</li>
     </ul>
     </p>
 
@@ -248,16 +343,16 @@ st.markdown(
     Di seguito sono elencate le delegazioni escluse:
     <ul>
         <li><a href = "https://en.wikipedia.org/wiki/Mixed_team_at_the_Olympics">Mixed team</a>: 
-            squadre composte da atleti di diverse nazioni, partecipanti alle prime edizioni dei Giochi Olimpici.
+            squadre composte da atleti di diverse nazioni, partecipanti alle prime edizioni dei giochi olimpici;
         </li>
         <li><a href = "https://en.wikipedia.org/wiki/Independent_Olympic_Participants">Independent Olympic Participants</a>: 
-            atleti che hanno gareggiato sotto una bandiera neutrale a causa di problemi geopolitici o sanzioni internazionali.
+            atleti che hanno gareggiato sotto una bandiera neutrale a causa di problemi geopolitici o sanzioni internazionali;
         </li>
         <li><a href = "https://en.wikipedia.org/wiki/Refugee_Olympic_Team">Refugee Olympic Team</a>: una delegazione speciale 
-            formata da atleti rifugiati, introdotta per la prima volta alle Olimpiadi di Rio 2016.
+            formata da atleti rifugiati, introdotta per la prima volta alle Olimpiadi di Rio 2016;
         </li>
         <li><a href = "https://en.wikipedia.org/wiki/Individual_Neutral_Athletes">Individual Neutral Athletes</a>: atleti 
-            che hanno partecipato senza rappresentare il loro paese per ragioni politiche o disciplinari.
+            che hanno partecipato senza rappresentare il loro paese per ragioni politiche o disciplinari;
         </li>
         <li><a href = "https://en.wikipedia.org/wiki/Independent_Olympic_Athletes">Independent Olympic Athletes</a>: simile ai 
             partecipanti neutrali, include atleti di nazioni prive di un comitato olimpico attivo o riconosciuto.
