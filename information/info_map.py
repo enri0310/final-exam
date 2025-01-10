@@ -27,7 +27,7 @@ st.markdown(
     Per gestire i dati spaziali è stata utilizzata la libreria <b>geopandas</b>, che consente di rappresentare 
     le informazioni in un DataFrame con una colonna speciale dedicata alla geometria spaziale.
     In questa applicazione web i dati geografici sono stati ottenuti dal sito ufficiale <a href="https://www.naturalearthdata.com/">Natural Earth</a>. 
-    Per migliorare l'efficienza del caricamento questi dati sono stati scaricati preventivamente e salvati nella cartella <b>'map'</b>.
+    Per migliorare l'efficienza del caricamento questi dati sono stati scaricati preventivamente e salvati nella cartella "<b>map</b>".
     </p>
     """,
     unsafe_allow_html = True
@@ -41,8 +41,8 @@ st.markdown(
     <p>
     La visualizzazione delle mappe in Streamlit può risultare complessa e richiede un encoding specifico.
     Per includere una mappa, è necessario salvarla prima in un file HTML e successivamente caricarla utilizzando 
-    la funzione: <b>st.components.v1.html()</b>. Questo processo può essere oneroso in termini di tempo e risorse computazionali, soprattutto su 
-    macchine meno performanti. Per ottimizzare questa operazione, le mappe generate vengono salvate nella cartella <b>'map'</b>.
+    la funzione: <code>st.components.v1.html()</code>. Questo processo può essere oneroso in termini di tempo e risorse computazionali, soprattutto su 
+    macchine meno performanti. Per ottimizzare questa operazione, le mappe generate vengono salvate nella cartella "<b>map</b>".
     Se la mappa è già presente, viene caricata direttamente senza dover ripetere il salvataggio.
     </p>
     """,
