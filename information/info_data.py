@@ -163,8 +163,8 @@ st.markdown(
     </p>
 
     <ul>
-    <li>ogni riga rappresenta una singola osservazione, come per esempio un atleta o una nazione in un specifico; </li>
-    <li>ogni colonna rappresenta una variabile distinta, per esmepio totale di medaglie o l'anno;</li>
+    <li>ogni riga rappresenta una singola osservazione, come per esempio un atleta o una nazione nello specifico; </li>
+    <li>ogni colonna rappresenta una variabile distinta, per esempio totale di medaglie o l'anno;</li>
     <li>ogni tabella rappresenta un set di dati ben definito.</li>
     </ul>
 
@@ -175,8 +175,8 @@ st.markdown(
 
     <ul>
     <li>la <strong>riorganizzazione</strong> dei dati attraverso l'utilizzo delle funzioni <code>pivot</code> e <code>unpivot</code> della libreria 
-    <strong>Polars</strong> per ristrutturare i dati in formato più adatto ai grafici.</li>
-    <li>l'<strong>unione</strong> di tabelle prvenienti da diverse fonti di dati mediante <code>join</code> (Polars) e <code>merge</code> 
+    <strong>Polars</strong> per ristrutturare i dati in formato più adatto ai grafici;</li>
+    <li>l'<strong>unione</strong> di tabelle provenienti da diverse fonti di dati mediante <code>join</code> (Polars) e <code>merge</code> 
     (<strong>Pandas</strong> e <strong>Geopandas</strong>).</li>
     </ul>
 
