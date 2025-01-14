@@ -23,19 +23,19 @@ def get_italy():
     if not lines:
         print(f"Nessuna tabella trovata in {path}")
         return None
-    region_pattern = re.compile(r"^(.*?)(\(\d+\))$")
-    athlete_pattern = re.compile(r"^(.*?)(\(.+\))$") 
+    region_pattern = re.compile(r"^(.*?)(\(\d+\))$") #è una regione? LOMBARDIA (15)
+    athlete_pattern = re.compile(r"^(.*?)(\(.+\))$")  #è un atleta? Nicolò Martinenghi (oro, Varese)
     medals_data = []
     region = None
 
     for line in lines:
         is_region = region_pattern.match(line)
         if is_region:
-            region = is_region.group(1)
+            region = is_region.group(1) #nome regione
         elif region and "(" in line:
             is_athlete = athlete_pattern.match(line)
             if is_athlete:
-                athlete = is_athlete.group(1)
+                athlete = is_athlete.group(1) #nome atleta
                 details = is_athlete.group(2).strip("()")
                 d_parts = details.split(" e ")
                 for part in d_parts:
