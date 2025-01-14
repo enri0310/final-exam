@@ -1,14 +1,12 @@
 # Le Olimpiadi estive
 
-
 ## Introduzione
 
 Questa applicazione web ha lo scopo di fornire un'analisi approfondita sui medaglieri delle Olimpiadi moderne offrendo strumenti visivi e interattivi per esplorare dati, mappe e statistiche.
 
-
 ## Requisiti e dipendenze
 
-- **Python 3.13**: assicurati di avere installata la versione 3.13 di Python. Puoi scaricarla [da qui](https://www.python.org/downloads/).
+- **Python 3.13**: assicurati di avere installata la versione 3.13 di Python. Puoi scaricarla [qui](https://www.python.org/downloads/).
 - **Gestione delle dipendenze**: le dipendenze sono state gestite tramite `uv`, quindi non è necessario scaricare alcuna libreria manualmente.
 
 ## Avvio
@@ -31,6 +29,9 @@ cd final-exam
 uv run streamlit run main.py
 ```
 
+## Streamlit online
+
+L'applicazione web è consultabile anche direttamente al seguente indirizzo: [https://olimpiadi.streamlit.app/](https://olimpiadi.streamlit.app/)
 
 ## **Progetto**
 
